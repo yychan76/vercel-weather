@@ -1,0 +1,39 @@
+<mat-card>
+  <form class="weather-form" [formGroup]="form">
+    <div fxLayout="row">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>City Name</mat-label>
+        <input matInput formControlName="city" placeholder="Ex. Singapore" />
+        <mat-error *ngIf="form.controls['city'].hasError('required')"
+          >City Name is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.controls['city'].hasError('minlength')"
+          >City Name needs to be at least <strong>3 letters</strong>
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        class="add-button"
+        [disabled]="form.invalid"
+        (click)="addCity()"
+      >
+        Add
+      </button>
+    </div>
+  </form>
+</mat-card>
+<mat-card>
+  <mat-selection-list [multiple]="false">
+    <mat-list-option
+      *ngFor="let city of cities"
+      [value]="city"
+      [routerLink]="['/weather', city]"
+    >
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      {{ city | titlecase }}
+      <button mat-icon-button color="warn" (click)="deleteCity(city)"><mat-icon>clear</mat-icon></button>
+    </div>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-card>

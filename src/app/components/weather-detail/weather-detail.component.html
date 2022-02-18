@@ -1,0 +1,95 @@
+<mat-card *ngFor="let weather of weatherList">
+  <mat-card-header>
+    <div
+      mat-card-avatar
+      [style.backgroundSize]="'cover'"
+      [style.backgroundImage]="
+        weather
+          ? 'url(http://openweathermap.org/img/wn/' + weather?.icon + '@4x.png)'
+          : ''
+      "
+    ></div>
+    <mat-card-title-group>
+      <mat-card-title *ngIf="weather">
+        <div
+          fxLayout="row"
+          fxLayout.lt-sm="column"
+          fxLayoutGap="15px"
+          fxLayoutGap.lt-sm="20px"
+        >
+          <span fxFlexOrder="1" fxFlexOrder.lt-sm="2">
+            {{ weather?.cityName }},
+            {{ weather ? getCountryName(weather?.country || "") : "" }}
+          </span>
+          <span class="flag" fxFlexOrder="2" fxFlexOrder.lt-sm="1">
+            {{ weather ? getFlagEmoji(weather?.country || "") : "" }}
+          </span>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="weather">
+        {{ weather?.main }}, {{ weather?.description }}
+      </mat-card-subtitle>
+    </mat-card-title-group>
+  </mat-card-header>
+  <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title">
+  <mat-card-content>
+    <mat-list>
+      <div mat-subheader>Temperatures</div>
+      <div fxLayout="row">
+        <mat-list-item>
+          <mat-icon mat-list-icon>thermostat</mat-icon>
+          <div mat-line>Temperature</div>
+          <div mat-line>
+            {{ weather?.temperature | number: "1.2-2" }} &#176;C
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon>thermostat</mat-icon>
+          <div mat-line>Feels Like</div>
+          <div mat-line>
+            {{ weather?.feels_like | number: "1.2-2" }} &#176;C
+          </div>
+        </mat-list-item>
+      </div>
+      <div fxLayout="row">
+        <mat-list-item>
+          <mat-icon mat-list-icon>thermostat</mat-icon>
+          <div mat-line>Low</div>
+          <div mat-line>{{ weather?.temp_min | number: "1.2-2" }} &#176;C</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon>thermostat</mat-icon>
+          <div mat-line>High</div>
+          <div mat-line>{{ weather?.temp_max | number: "1.2-2" }} &#176;C</div>
+        </mat-list-item>
+      </div>
+      <mat-divider></mat-divider>
+      <div mat-subheader>Humidity</div>
+      <mat-list-item>
+        <mat-icon mat-list-icon>water_drop</mat-icon>
+        <div mat-line>Humidity</div>
+        <div mat-line>{{ weather?.humidity }} %</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item *ngIf="weather?.cached">
+        <mat-icon mat-list-icon>cached</mat-icon>
+        <div mat-line>Cached</div>
+        <div mat-line>{{ getCacheAge(weather?.timestamp || 0) }}</div>
+      </mat-list-item>
+    </mat-list>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="goBack()">Back</button>
+    </mat-card-actions>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> API Result </mat-panel-title>
+          <mat-panel-description>
+            Data returned from server
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <pre>{{ weather | json }}</pre>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
