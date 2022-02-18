@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _moment from 'moment';
-import { lastValueFrom, map, Subscription } from 'rxjs';
+import { catchError, lastValueFrom, map, of, Subscription } from 'rxjs';
 import { Weather } from 'src/app/common/model';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
-
 
 const moment = _moment;
 const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
@@ -43,13 +42,24 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     this.sub$ = this.weatherService
       .getWeather(this.city)
       .pipe(
+        catchError((err) => {
+          console.error('observable error: ', err);
+          return of([err.error]);
+        }),
         map((weathers) => {
           // the array of weather results from openweathermap
           // console.info('weathers: ', weathers);
           weathers.forEach((weather) => {
             // go through each member of the array and look for a giphy image
             // console.info('weather: ', weather);
-            lastValueFrom(this.giphyService.search('weather ' + weather.main + ' ' + weather.description)).then(
+            let giphy_search_term = '';
+            if (weather.cod == '404') {
+              giphy_search_term = '404 not found';
+            } else {
+              giphy_search_term =
+                'weather ' + weather.main + ' ' + weather.description;
+            }
+            lastValueFrom(this.giphyService.search(giphy_search_term)).then(
               (result) => {
                 // apply the giphy image result to the weather object
                 // console.info('giphy: ', result);

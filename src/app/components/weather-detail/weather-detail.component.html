@@ -4,13 +4,15 @@
       mat-card-avatar
       [style.backgroundSize]="'cover'"
       [style.backgroundImage]="
-        weather
-          ? 'url(http://openweathermap.org/img/wn/' + weather?.icon + '@4x.png)'
-          : ''
+        weather.icon
+          ? 'url(https://openweathermap.org/img/wn/' +
+            weather?.icon +
+            '@4x.png)'
+          : 'url(https://upload.wikimedia.org/wikipedia/commons/c/c6/Exclamation_Circle_Red.svg)'
       "
     ></div>
-    <mat-card-title-group>
-      <mat-card-title *ngIf="weather">
+    <mat-card-title-group *ngIf="weather.cityName; else elseBlock">
+      <mat-card-title>
         <div
           fxLayout="row"
           fxLayout.lt-sm="column"
@@ -26,14 +28,22 @@
           </span>
         </div>
       </mat-card-title>
-      <mat-card-subtitle *ngIf="weather">
+      <mat-card-subtitle>
         {{ weather?.main }}, {{ weather?.description }}
       </mat-card-subtitle>
     </mat-card-title-group>
+    <ng-template #elseBlock>
+      <mat-card-title-group>
+        <mat-card-title> Error Retrieving Weather </mat-card-title>
+        <mat-card-subtitle>
+          Weather for city "{{ city }}" is not available
+        </mat-card-subtitle>
+      </mat-card-title-group>
+    </ng-template>
   </mat-card-header>
-  <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title">
+  <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title" />
   <mat-card-content>
-    <mat-list>
+    <mat-list *ngIf="weather.temperature">
       <div mat-subheader>Temperatures</div>
       <div fxLayout="row">
         <mat-list-item>

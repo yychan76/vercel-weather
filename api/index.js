@@ -24,29 +24,36 @@ app.get("/api/weather/:city", (req, res) => {
     .then((result) => {
       console.info(result);
       let cleanedResults = [];
-      result.weather.forEach((weather) => {
-        cleanedResults.push({
-          cityName: result.name,
-          country: result.sys.country,
-          main: weather.main,
-          description: weather.description,
-          icon: weather.icon,
-          temperature: result.main.temp,
-          feels_like: result.main.feels_like,
-          temp_min: result.main.temp_min,
-          temp_max: result.main.temp_max,
-          humidity: result.main.humidity,
-          timestamp: result.dt,
-          query_timestamp: new Date().getTime(),
+      try {
+        result.weather.forEach((weather) => {
+          cleanedResults.push({
+            cityName: result.name,
+            country: result.sys.country,
+            main: weather.main,
+            description: weather.description,
+            icon: weather.icon,
+            temperature: result.main.temp,
+            feels_like: result.main.feels_like,
+            temp_min: result.main.temp_min,
+            temp_max: result.main.temp_max,
+            humidity: result.main.humidity,
+            timestamp: result.dt,
+            query_timestamp: new Date().getTime(),
+          });
         });
-      });
+      } catch (ex) {
+        console.error(ex);
+        throw new Error(JSON.stringify(result));
+      }
+
       console.info(cleanedResults);
       res.status(200).type("application/json");
       res.json(cleanedResults);
     })
     .catch((err) => {
-      res.status(400).type("text/html");
-      res.send("error: " + JSON.stringify(err));
+      console.error("openweather api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
     });
 });
 
@@ -54,8 +61,8 @@ app.get("/api/search-giphy", (req, res) => {
   const url = withQuery("https://api.giphy.com/v1/gifs/search", {
     api_key: GIPHY_KEY,
     q: req.query.q,
-    rating: 'g',
-    lang: 'en',
+    rating: "g",
+    lang: "en",
     offset: Math.floor(Math.random() * 100),
     limit: 1,
   });
@@ -74,8 +81,9 @@ app.get("/api/search-giphy", (req, res) => {
       res.json(gifs);
     })
     .catch((err) => {
-      res.status(400).type("text/html");
-      res.send("error: " + JSON.stringify(err));
+      console.error("giphy api return error:", err);
+      res.status(400).type("application/json");
+      res.json(err);
     });
 });
 
