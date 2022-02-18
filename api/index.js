@@ -9,6 +9,8 @@ require("dotenv").config();
 const OPENWEATHERMAP_KEY = process.env.OPENWEATHERMAP_KEY;
 const GIPHY_KEY = process.env.GIPHY_KEY;
 
+const GIPHY_RANDOM_RANGE = 200;
+
 // create an instance of Express
 const app = express();
 
@@ -63,7 +65,7 @@ app.get("/api/search-giphy", (req, res) => {
     q: req.query.q,
     rating: "g",
     lang: "en",
-    offset: Math.floor(Math.random() * 100),
+    offset: Math.floor(Math.random() * GIPHY_RANDOM_RANGE),
     limit: 1,
   });
   console.info(url);
