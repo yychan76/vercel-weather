@@ -1,4 +1,6 @@
-# Client
+# JAMStack Weather App
+
+This is a simple weather app using Angular for frontend and Express.js for the backend, hosted on Vercel
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.0.
 
