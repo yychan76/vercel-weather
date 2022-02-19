@@ -1,0 +1,12 @@
+<mat-button-toggle-group
+      [formControl]="darkToggleControl"
+      class="toggle"
+      (change)="darkToggleControl.setValue($event.value)"
+    >
+      <mat-button-toggle value="true" *ngIf="!darkModeEnabled" class="toggle dark">
+        <mat-icon>nightlight_round</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="false" *ngIf="darkModeEnabled" class="toggle day">
+        <mat-icon>brightness_7</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>

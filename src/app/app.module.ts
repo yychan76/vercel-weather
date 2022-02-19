@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { WeatherDetailComponent } from './components/weather-detail/weather-detail.component';
 import { CityListComponent } from './components/city-list/city-list.component';
+import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
@@ -19,11 +21,16 @@ const appRoutes: Routes = [
 ];
 
 const extraOptions: ExtraOptions = {
- useHash: true
-}
+  useHash: true,
+};
 
 @NgModule({
-  declarations: [AppComponent, WeatherDetailComponent, CityListComponent],
+  declarations: [
+    AppComponent,
+    WeatherDetailComponent,
+    CityListComponent,
+    DarkModeToggleComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -34,6 +41,7 @@ const extraOptions: ExtraOptions = {
     RouterModule.forRoot(appRoutes, extraOptions),
     FlexLayoutModule,
     HttpClientModule,
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,6 +1,18 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title><h1>Weather</h1></mat-card-title>
-  </mat-card-header>
-  <router-outlet></router-outlet>
-</mat-card>
+<div class="content app-frame mat-app-background">
+  <mat-card>
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+      <mat-card-title><h1>Weather</h1></mat-card-title>
+      <app-dark-mode-toggle
+        (onDarkModeEnable)="setDarkMode($event)"
+      ></app-dark-mode-toggle>
+    </mat-card-header>
+    <router-outlet></router-outlet>
+  </mat-card>
+  <footer class="center">
+    <button mat-button>
+      <a href="https://github.com/yychan76/vercel-weather" target="_blank">
+        <fa-icon [icon]="faGithub"></fa-icon> &nbsp;&nbsp; <span>Code Repository on GitHub</span>
+      </a>
+    </button>
+  </footer>
+</div>
