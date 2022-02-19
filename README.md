@@ -4,6 +4,8 @@ This is a simple weather app using Angular for frontend and Express.js for the b
 
 You need to provide your own environment variables for `GIPHY_KEY` and `OPENWEATHERMAP_KEY` and set to your own keys for the two API services [Giphy](https://developers.giphy.com/explorer#explorer) and [OpenWeather](https://openweathermap.org/api) respectively.
 
+### See this [code in action](https://jam-weather-yychan76.vercel.app/)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.0.
 
 ## Development server
