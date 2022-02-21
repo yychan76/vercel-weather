@@ -102,10 +102,27 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   }
 
   degreeToDirection(degree: number) {
-    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const directions = [
+      'N',
+      'NNE',
+      'NE',
+      'ENE',
+      'E',
+      'ESE',
+      'SE',
+      'SSE',
+      'S',
+      'SSW',
+      'SW',
+      'WSW',
+      'W',
+      'WNW',
+      'NW',
+      'NNW',
+    ];
     // conform to 0-360
     degree = degree < 0 ? 360 - (Math.abs(degree) % 360) : degree % 360;
-    return `${directions[(degree / 45) | 0]}`;
+    return `${directions[(degree / 22.5) | 0]}`;
   }
 
   uvIndexLabel(uvIndex: number) {
