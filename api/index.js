@@ -30,6 +30,8 @@ app.get("/api/weather/:city", (req, res) => {
         result.weather.forEach((weather) => {
           cleanedResults.push({
             cityName: result.name,
+            lat: result.coord.lat,
+            lon: result.coord.lon,
             country: result.sys.country,
             main: weather.main,
             description: weather.description,
@@ -39,6 +41,12 @@ app.get("/api/weather/:city", (req, res) => {
             temp_min: result.main.temp_min,
             temp_max: result.main.temp_max,
             humidity: result.main.humidity,
+            pressure: result.main.pressure,
+            wind_speed: result.wind.speed,
+            wind_dir: result.wind.deg,
+            wind_gust: result.wind.gust,
+            sunrise: result.sys.sunrise,
+            sunset: result.sys.sunset,
             timestamp: result.dt,
             query_timestamp: new Date().getTime(),
           });

@@ -81,6 +81,61 @@
         <div mat-line>{{ weather?.humidity }} %</div>
       </mat-list-item>
       <mat-divider></mat-divider>
+      <div mat-subheader>Wind</div>
+      <div fxLayout="row">
+        <mat-list-item>
+          <mat-icon mat-list-icon>air</mat-icon>
+          <div mat-line>Speed</div>
+          <div mat-line>{{ weather?.wind_speed }} m/s {{ weather.wind_gust ? ' &nbsp;&nbsp;   [ Gust ' + weather.wind_gust + ' m/s ]' : '' }}</div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon>explore</mat-icon>
+          <div mat-line>Direction</div>
+          <div mat-line>
+            <mat-icon
+              [style]="
+                'transform: rotate(' +
+                weather?.wind_dir +
+                'deg); vertical-align: text-top'
+              "
+              >south</mat-icon
+            >
+            {{ weather?.wind_dir }} &deg; &nbsp;
+            {{ degreeToDirection(weather?.wind_dir || 0) }}
+          </div>
+        </mat-list-item>
+      </div>
+      <mat-divider></mat-divider>
+      <div mat-subheader>Pressure</div>
+      <mat-list-item>
+        <mat-icon mat-list-icon>speed</mat-icon>
+        <div mat-line>Pressure</div>
+        <div mat-line>{{ weather?.pressure }} hPa</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <div mat-subheader>Sun</div>
+      <div fxLayout="row">
+        <mat-list-item>
+          <mat-icon mat-list-icon>light_mode</mat-icon>
+          <div mat-line>Sunrise</div>
+          <div mat-line>
+            {{
+              (weather.sunrise ? weather.sunrise * 1000 : 0)
+                | date: "mediumTime"
+            }}
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon>bedtime</mat-icon>
+          <div mat-line>Sunset</div>
+          <div mat-line>
+            {{
+              (weather.sunset ? weather.sunset * 1000 : 0) | date: "mediumTime"
+            }}
+          </div>
+        </mat-list-item>
+      </div>
+      <mat-divider></mat-divider>
       <mat-list-item *ngIf="weather?.cached">
         <mat-icon mat-list-icon>cached</mat-icon>
         <div mat-line>Cached</div>

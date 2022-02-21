@@ -1,5 +1,7 @@
 export interface Weather {
   cityName: string;
+  lat: number;
+  lon: number;
   country: string;
   main: string;
   description: string;
@@ -9,6 +11,12 @@ export interface Weather {
   temp_min: number;
   temp_max: number;
   humidity: number;
+  pressure: number;
+  wind_speed: number;
+  wind_dir: number;
+  wind_gust: number;
+  sunrise: number;
+  sunset: number;
   gif_title: string;
   gif_url: string;
   cached: boolean;

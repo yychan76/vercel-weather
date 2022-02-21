@@ -100,4 +100,11 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     let timeDiff = moment.duration(timestampDate.diff(moment())).humanize(true);
     return `${timeDiff} at ${timestampDate}`;
   }
+
+  degreeToDirection(degree: number) {
+    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    // conform to 0-360
+    degree = degree < 0 ? 360 - (Math.abs(degree) % 360) : degree % 360;
+    return `${directions[(degree / 45) | 0]}`;
+  }
 }
