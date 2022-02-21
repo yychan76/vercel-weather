@@ -45,15 +45,15 @@
   <mat-card-content>
     <mat-list *ngIf="weather.temperature">
       <div mat-subheader>Temperatures</div>
-      <div fxLayout="row">
-        <mat-list-item>
+      <div fxLayout="row wrap">
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Temperature</div>
           <div mat-line>
             {{ weather?.temperature | number: "1.2-2" }} &#176;C
           </div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Feels Like</div>
           <div mat-line>
@@ -61,13 +61,13 @@
           </div>
         </mat-list-item>
       </div>
-      <div fxLayout="row">
-        <mat-list-item>
+      <div fxLayout="row wrap">
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Low</div>
           <div mat-line>{{ weather?.temp_min | number: "1.2-2" }} &#176;C</div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>High</div>
           <div mat-line>{{ weather?.temp_max | number: "1.2-2" }} &#176;C</div>
@@ -82,20 +82,16 @@
       </mat-list-item>
       <mat-divider></mat-divider>
       <div mat-subheader>Wind</div>
-      <div fxLayout="row">
-        <mat-list-item>
+      <div fxLayout="row wrap">
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>air</mat-icon>
           <div mat-line>Speed</div>
-          <div mat-line>
-            {{ weather?.wind_speed }} m/s
-            {{
-              weather.wind_gust
-                ? " &nbsp;&nbsp;   [ Gust " + weather.wind_gust + " m/s ]"
-                : ""
-            }}
+          <div mat-line>{{ weather?.wind_speed }} m/s</div>
+          <div mat-line *ngIf="weather.wind_gust">
+            <em>{{ "Gust: " + weather.wind_gust + " m/s" }}</em>
           </div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>explore</mat-icon>
           <div mat-line>Direction</div>
           <div mat-line>
@@ -121,15 +117,15 @@
       </mat-list-item>
       <mat-divider></mat-divider>
       <div mat-subheader>Sun</div>
-      <div fxLayout="row">
-        <mat-list-item>
+      <div fxLayout="row wrap">
+        <mat-list-item fxFlex fxFlex.lt-sm="100">
           <mat-icon mat-list-icon>new_releases</mat-icon>
           <div mat-line>UV Index</div>
           <div mat-line>
             {{ weather?.uvi }} &nbsp; {{ uvIndexLabel(weather?.uvi || 0) }}
           </div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>light_mode</mat-icon>
           <div mat-line>Sunrise</div>
           <div mat-line>
@@ -139,7 +135,7 @@
             }}
           </div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item fxFlex>
           <mat-icon mat-list-icon>bedtime</mat-icon>
           <div mat-line>Sunset</div>
           <div mat-line>
@@ -155,21 +151,20 @@
         <mat-list-item>
           <mat-icon mat-list-icon>crisis_alert</mat-icon>
           <div mat-line *ngFor="let a of weather.alerts">
-            <div mat-line>
-              <strong>Event: &nbsp;</strong> {{ a?.event }}
-            </div>
+            <div mat-line><strong>Event: &nbsp;</strong> {{ a?.event }}</div>
             <div mat-line>
               <strong>Agency: &nbsp;</strong> {{ a?.sender_name }}
             </div>
             <div mat-line>
-              <strong>Duration: &nbsp;</strong> {{ (a.start ? a.start * 1000 : 0) | date: 'medium' }} - {{ (a.end ? a.end * 1000 : 0) | date: 'medium' }}
+              <strong>Duration: &nbsp;</strong>
+              {{ (a.start ? a.start * 1000 : 0) | date: "medium" }} -
+              {{ (a.end ? a.end * 1000 : 0) | date: "medium" }}
             </div>
+            <br>
             <div mat-line>
               <strong>Description:</strong>
             </div>
-            <div mat-line class="pre-wrap">
-              {{ a?.description }}
-            </div>
+            <div mat-line class="pre-wrap">{{ a?.description }}</div>
           </div>
         </mat-list-item>
       </div>
