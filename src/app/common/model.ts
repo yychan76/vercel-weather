@@ -15,13 +15,24 @@ export interface Weather {
   wind_speed: number;
   wind_dir: number;
   wind_gust: number;
+  uvi: number;
   sunrise: number;
   sunset: number;
+  alerts: Alert[];
   gif_title: string;
   gif_url: string;
   cached: boolean;
   timestamp: number;
   query_timestamp: number;
+}
+
+export interface Alert {
+  sender_name: string;
+  event: string;
+  start: number;
+  end: number;
+  description: string;
+  tags: string[];
 }
 
 export interface Giphy {

@@ -107,4 +107,18 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     degree = degree < 0 ? 360 - (Math.abs(degree) % 360) : degree % 360;
     return `${directions[(degree / 45) | 0]}`;
   }
+
+  uvIndexLabel(uvIndex: number) {
+    if (uvIndex < 3) {
+      return 'Low';
+    } else if (uvIndex < 6) {
+      return 'Moderate';
+    } else if (uvIndex < 8) {
+      return 'High';
+    } else if (uvIndex < 11) {
+      return 'Very High';
+    } else {
+      return 'Extreme';
+    }
+  }
 }

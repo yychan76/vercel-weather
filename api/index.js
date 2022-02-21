@@ -1,6 +1,5 @@
 const express = require("express");
 const fetch = require("node-fetch");
-const { textChangeRangeNewSpan } = require("typescript");
 const withQuery = require("with-query").default;
 
 // configure the environment variables
@@ -17,37 +16,50 @@ const app = express();
 app.get("/api/weather/:city", (req, res) => {
   const url = withQuery("https://api.openweathermap.org/data/2.5/weather", {
     q: req.params.city,
-    appid: OPENWEATHERMAP_KEY,
     units: "metric",
+    appid: OPENWEATHERMAP_KEY,
   });
+  let country;
+  let cityName;
+  let temp_min;
+  let temp_max;
   console.info(url);
   fetch(url)
     .then((result) => result.json())
     .then((result) => {
-      console.info(result);
+      country = result.sys.country;
+      cityName = result.name;
+      temp_min = result.main.temp_min;
+      temp_max = result.main.temp_max;
+      return weatherOneCall(result.coord.lat, result.coord.lon);
+    })
+    .then((result) => {
+      console.info("current weather: ", result);
       let cleanedResults = [];
       try {
-        result.weather.forEach((weather) => {
+        result.current.weather.forEach((weather) => {
           cleanedResults.push({
-            cityName: result.name,
-            lat: result.coord.lat,
-            lon: result.coord.lon,
-            country: result.sys.country,
+            cityName: cityName,
+            lat: result.lat,
+            lon: result.lon,
+            country: country,
             main: weather.main,
             description: weather.description,
             icon: weather.icon,
-            temperature: result.main.temp,
-            feels_like: result.main.feels_like,
-            temp_min: result.main.temp_min,
-            temp_max: result.main.temp_max,
-            humidity: result.main.humidity,
-            pressure: result.main.pressure,
-            wind_speed: result.wind.speed,
-            wind_dir: result.wind.deg,
-            wind_gust: result.wind.gust,
-            sunrise: result.sys.sunrise,
-            sunset: result.sys.sunset,
-            timestamp: result.dt,
+            temperature: result.current.temp,
+            feels_like: result.current.feels_like,
+            temp_min: temp_min,
+            temp_max: temp_max,
+            humidity: result.current.humidity,
+            pressure: result.current.pressure,
+            wind_speed: result.current.wind_speed,
+            wind_dir: result.current.wind_deg,
+            wind_gust: result.current.wind_gust,
+            uvi: result.current.uvi,
+            sunrise: result.current.sunrise,
+            sunset: result.current.sunset,
+            alerts: result.alerts,
+            timestamp: result.current.dt,
             query_timestamp: new Date().getTime(),
           });
         });
@@ -56,7 +68,7 @@ app.get("/api/weather/:city", (req, res) => {
         throw new Error(JSON.stringify(result));
       }
 
-      console.info(cleanedResults);
+      console.info("cleanedResults: ", cleanedResults);
       res.status(200).type("application/json");
       res.json(cleanedResults);
     })
@@ -66,6 +78,25 @@ app.get("/api/weather/:city", (req, res) => {
       res.json(JSON.parse(err.message));
     });
 });
+
+function weatherOneCall(lat, lon) {
+  const url = withQuery("https://api.openweathermap.org/data/2.5/onecall", {
+    lat: lat,
+    lon: lon,
+    units: "metric",
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  return fetch(url)
+    .then((result) => result.json())
+    .then((json) => {
+      return json;
+    })
+    .catch((err) => {
+      console.error(err);
+      return "";
+    });
+}
 
 app.get("/api/search-giphy", (req, res) => {
   const url = withQuery("https://api.giphy.com/v1/gifs/search", {

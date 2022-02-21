@@ -7,3 +7,8 @@
   font-size: 4rem;
   vertical-align: middle;
 }
+
+.mat-line.pre-wrap {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
