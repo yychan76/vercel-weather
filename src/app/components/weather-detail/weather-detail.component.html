@@ -164,17 +164,17 @@
           <mat-list>
             <mat-list-item *ngFor="let a of weather.alerts; last as last">
               <mat-icon mat-list-icon color="warn">priority_high</mat-icon>
-              <div mat-line><strong>Event: &nbsp;</strong> {{ a?.event }}</div>
-              <div mat-line>
+              <div mat-line class="pre-wrap"><strong>Event: &nbsp;</strong> {{ a?.event | titlecase }}</div>
+              <div mat-line class="pre-wrap">
                 <strong>Agency: &nbsp;</strong> {{ a?.sender_name }}
               </div>
-              <div mat-line>
+              <div mat-line class="pre-wrap">
                 <strong>Duration: &nbsp;</strong>
-                {{ (a.start ? a.start * 1000 : 0) | date: "medium" }} -
-                {{ (a.end ? a.end * 1000 : 0) | date: "medium" }}
+                {{ (a.start ? a.start * 1000 : 0) | date: "MMM d, y, h:mm a" }} &mdash;
+                {{ (a.end ? a.end * 1000 : 0) | date: "MMM d, y, h:mm a z" }}
               </div>
-              <br />
               <div mat-line>
+                <br>
                 <strong>Description:</strong>
               </div>
               <div mat-line class="pre-wrap">{{ a?.description }}</div>
