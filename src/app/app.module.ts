@@ -13,6 +13,7 @@ import { WeatherDetailComponent } from './components/weather-detail/weather-deta
 import { CityListComponent } from './components/city-list/city-list.component';
 import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LoggerService } from './common/services/logger.service';
 
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
@@ -43,7 +44,7 @@ const extraOptions: ExtraOptions = {
     HttpClientModule,
     FontAwesomeModule,
   ],
-  providers: [],
+  providers: [LoggerService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

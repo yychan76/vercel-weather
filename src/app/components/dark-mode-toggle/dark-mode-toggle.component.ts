@@ -1,5 +1,4 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, HostBinding, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -16,11 +15,11 @@ export class DarkModeToggleComponent implements OnInit, OnDestroy {
   darkToggleControl = new FormControl('');
 
   ngOnInit(): void {
-    this.setDarkMode();
+    // this.setDarkMode();
   }
 
   ngOnDestroy(): void {
-    this.sub$.unsubscribe();
+    this.sub$?.unsubscribe();
   }
 
   setDarkMode() {
