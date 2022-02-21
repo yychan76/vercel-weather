@@ -3,7 +3,7 @@
     <div
       mat-card-avatar
       [style.backgroundSize]="'cover'"
-      [style.backgroundColor]="'silver'"
+      [style.backgroundColor]="getTimeOfDayColor(weather)"
       [style.backgroundImage]="
         weather.icon
           ? 'url(https://openweathermap.org/img/wn/' +

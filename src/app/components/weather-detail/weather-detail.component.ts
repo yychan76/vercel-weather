@@ -101,6 +101,19 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     return `${timeDiff} at ${timestampDate}`;
   }
 
+  getTimeOfDayColor(weather: Weather): string {
+    if (
+      moment().isBetween(
+        moment(weather.sunrise * 1000),
+        moment(weather.sunset * 1000)
+      )
+    ) {
+      return 'burlywood';
+    } else {
+      return 'steelblue';
+    }
+  }
+
   degreeToDirection(degree: number) {
     const directions = [
       'N',
