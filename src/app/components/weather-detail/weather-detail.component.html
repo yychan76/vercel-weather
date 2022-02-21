@@ -20,8 +20,10 @@
           fxLayoutGap.lt-sm="20px"
         >
           <span fxFlexOrder="1" fxFlexOrder.lt-sm="2">
-            {{ weather?.cityName }}
-            {{ weather.country ? ', ' + getCountryName(weather.country) : "" }}
+            {{ weather?.cityName
+            }}{{
+              weather.country ? ", " + getCountryName(weather.country) : ""
+            }}
           </span>
           <span class="flag" fxFlexOrder="2" fxFlexOrder.lt-sm="1">
             {{ weather.country ? getFlagEmoji(weather.country) : "" }}
