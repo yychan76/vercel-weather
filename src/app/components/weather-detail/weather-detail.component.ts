@@ -138,4 +138,18 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
       return 'Extreme';
     }
   }
+
+  uvIndexLabelStyle(uvIndex: number) {
+    if (uvIndex < 3) {
+      return 'color: #579c00;font-weight: bold;';
+    } else if (uvIndex < 6) {
+      return 'color: #f8ce09;font-weight: bold;';
+    } else if (uvIndex < 8) {
+      return 'color: #ff8400;font-weight: bold;';
+    } else if (uvIndex < 11) {
+      return 'color: #d80000;font-weight: bold;';
+    } else {
+      return 'color: #7031a1;font-weight: bold;';
+    }
+  }
 }

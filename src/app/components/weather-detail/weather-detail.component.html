@@ -122,7 +122,10 @@
           <mat-icon mat-list-icon>new_releases</mat-icon>
           <div mat-line>UV Index</div>
           <div mat-line>
-            {{ weather?.uvi }} &nbsp; {{ uvIndexLabel(weather?.uvi || 0) }}
+            {{ weather?.uvi }} &nbsp;
+            <span [style]="uvIndexLabelStyle(weather?.uvi || 0)">
+              {{ uvIndexLabel(weather?.uvi || 0) }}
+            </span>
           </div>
         </mat-list-item>
         <mat-list-item fxFlex>
