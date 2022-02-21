@@ -150,22 +150,27 @@
         <div mat-subheader>Alerts</div>
         <mat-list-item>
           <mat-icon mat-list-icon>crisis_alert</mat-icon>
-          <div mat-line *ngFor="let a of weather.alerts">
-            <div mat-line><strong>Event: &nbsp;</strong> {{ a?.event }}</div>
-            <div mat-line>
-              <strong>Agency: &nbsp;</strong> {{ a?.sender_name }}
-            </div>
-            <div mat-line>
-              <strong>Duration: &nbsp;</strong>
-              {{ (a.start ? a.start * 1000 : 0) | date: "medium" }} -
-              {{ (a.end ? a.end * 1000 : 0) | date: "medium" }}
-            </div>
-            <br>
-            <div mat-line>
-              <strong>Description:</strong>
-            </div>
-            <div mat-line class="pre-wrap">{{ a?.description }}</div>
-          </div>
+          <mat-list>
+            <mat-list-item *ngFor="let a of weather.alerts; last as last">
+              <mat-icon mat-list-icon color="warn">priority_high</mat-icon>
+              <div mat-line><strong>Event: &nbsp;</strong> {{ a?.event }}</div>
+              <div mat-line>
+                <strong>Agency: &nbsp;</strong> {{ a?.sender_name }}
+              </div>
+              <div mat-line>
+                <strong>Duration: &nbsp;</strong>
+                {{ (a.start ? a.start * 1000 : 0) | date: "medium" }} -
+                {{ (a.end ? a.end * 1000 : 0) | date: "medium" }}
+              </div>
+              <br />
+              <div mat-line>
+                <strong>Description:</strong>
+              </div>
+              <div mat-line class="pre-wrap">{{ a?.description }}</div>
+              <br />
+              <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+            </mat-list-item>
+          </mat-list>
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
