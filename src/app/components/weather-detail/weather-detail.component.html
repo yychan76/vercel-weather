@@ -76,12 +76,24 @@
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
-      <div mat-subheader>Humidity</div>
-      <mat-list-item>
-        <mat-icon mat-list-icon>water_drop</mat-icon>
-        <div mat-line>Humidity</div>
-        <div mat-line>{{ weather?.humidity }} %</div>
-      </mat-list-item>
+      <div mat-subheader>Hygrometry</div>
+      <div fxLayout="row wrap">
+        <mat-list-item fxFlex>
+          <mat-icon mat-list-icon>water_drop</mat-icon>
+          <div mat-line>Humidity</div>
+          <div mat-line>{{ weather?.humidity }} %</div>
+        </mat-list-item>
+        <mat-list-item fxFlex>
+          <mat-icon mat-list-icon>speed</mat-icon>
+          <div mat-line>Pressure</div>
+          <div mat-line>{{ weather?.pressure }} hPa</div>
+        </mat-list-item>
+        <mat-list-item fxFlex>
+          <mat-icon mat-list-icon>grain</mat-icon>
+          <div mat-line>Dew Point</div>
+          <div mat-line>{{ weather?.dew_point | number: "1.2-2" }} &#176;C</div>
+        </mat-list-item>
+      </div>
       <mat-divider></mat-divider>
       <div mat-subheader>Wind</div>
       <div fxLayout="row wrap">
@@ -110,13 +122,6 @@
           </div>
         </mat-list-item>
       </div>
-      <mat-divider></mat-divider>
-      <div mat-subheader>Pressure</div>
-      <mat-list-item>
-        <mat-icon mat-list-icon>speed</mat-icon>
-        <div mat-line>Pressure</div>
-        <div mat-line>{{ weather?.pressure }} hPa</div>
-      </mat-list-item>
       <mat-divider></mat-divider>
       <div mat-subheader>Sun</div>
       <div fxLayout="row wrap">

@@ -52,6 +52,7 @@ app.get("/api/weather/:city", (req, res) => {
             temp_max: temp_max,
             humidity: result.current.humidity,
             pressure: result.current.pressure,
+            dew_point: result.current.dew_point,
             wind_speed: result.current.wind_speed,
             wind_dir: result.current.wind_deg,
             wind_gust: result.current.wind_gust,

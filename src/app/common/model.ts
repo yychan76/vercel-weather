@@ -12,6 +12,7 @@ export interface Weather {
   temp_max: number;
   humidity: number;
   pressure: number;
+  dew_point: number;
   wind_speed: number;
   wind_dir: number;
   wind_gust: number;
