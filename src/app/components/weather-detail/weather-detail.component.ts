@@ -165,9 +165,9 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     } else if (uvIndex < 8) {
       return 'color: #ff8400;font-weight: bold;';
     } else if (uvIndex < 11) {
-      return 'color: #d80000;font-weight: bold;';
+      return 'color: #d83030;font-weight: bold;';
     } else {
-      return 'color: #7031a1;font-weight: bold;';
+      return 'color: #a061d1;font-weight: bold;';
     }
   }
 }
