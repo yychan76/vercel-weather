@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutAlign="start">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <label id="remaining-sun-label" class="remaining-sun-name-label">
+      {{ nextEvent }} {{ timeToNextEvent }}
+    </label>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-icon mat-list-icon fxFlex="none">{{ prevEventIcon }}</mat-icon>
+    <mat-slider
+      fxFlex="100"
+      [class]="class"
+      invert="true"
+      max="100"
+      min="0"
+      step="1"
+      thumbLabel="true"
+      [value]="value"
+      aria-labelledby="remaining-sun-label"
+    >
+    </mat-slider>
+    <mat-icon mat-list-icon fxFlex="none">{{ nextEventIcon }}</mat-icon>
+  </div>
+  <!-- {{ value }} -->
+</div>

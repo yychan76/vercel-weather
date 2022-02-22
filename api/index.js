@@ -59,6 +59,7 @@ app.get("/api/weather/:city", (req, res) => {
             uvi: result.current.uvi,
             sunrise: result.current.sunrise,
             sunset: result.current.sunset,
+            next_sunrises: [result.daily[0].sunrise, result.daily[1].sunrise],
             alerts: result.alerts,
             timestamp: result.current.dt,
             query_timestamp: new Date().getTime(),

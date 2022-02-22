@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSliderModule } from '@angular/material/slider';
 
 const MATERIAL = [
   MatButtonModule,
@@ -35,6 +36,7 @@ const MATERIAL = [
   MatTabsModule,
   MatSlideToggleModule,
   MatExpansionModule,
+  MatSliderModule,
 ];
 
 @NgModule({

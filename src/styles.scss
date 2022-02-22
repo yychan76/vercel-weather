@@ -54,3 +54,30 @@ $angular-dark-theme: mat.define-dark-theme(
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+$day-slider-color: #ffc400;
+$night-slider-color: #006eff;
+
+.day .mat-slider-thumb {
+	background-color: $day-slider-color !important;
+}
+
+.day .mat-slider-thumb-label {
+	background-color: $day-slider-color !important;
+}
+
+.day .mat-slider-track-fill {
+	background-color: $day-slider-color !important;
+}
+
+.night .mat-slider-thumb {
+	background-color: $night-slider-color !important;
+}
+
+.night .mat-slider-thumb-label {
+	background-color: $night-slider-color !important;
+}
+
+.night .mat-slider-track-fill {
+	background-color: $night-slider-color !important;
+}

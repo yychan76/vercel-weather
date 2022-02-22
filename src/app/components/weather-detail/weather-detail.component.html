@@ -34,6 +34,9 @@
       <mat-card-subtitle>
         {{ weather?.main }}, {{ weather?.description }}
       </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="weather.sunrise && weather.sunset && weather.next_sunrises">
+        <app-remaining-sun-time [sunrise]="weather.sunrise" [sunset]="weather.sunset" [next_sunrises]="weather.next_sunrises"></app-remaining-sun-time>
+      </mat-card-subtitle>
     </mat-card-title-group>
     <ng-template #elseBlock>
       <mat-card-title-group>

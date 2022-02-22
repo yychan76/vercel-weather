@@ -19,6 +19,7 @@ export interface Weather {
   uvi: number;
   sunrise: number;
   sunset: number;
+  next_sunrises: number[];
   alerts: Alert[];
   gif_title: string;
   gif_url: string;

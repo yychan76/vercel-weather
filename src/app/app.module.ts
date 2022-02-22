@@ -14,6 +14,7 @@ import { CityListComponent } from './components/city-list/city-list.component';
 import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoggerService } from './common/services/logger.service';
+import { RemainingSunTimeComponent } from './components/remaining-sun-time/remaining-sun-time.component';
 
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
@@ -31,6 +32,7 @@ const extraOptions: ExtraOptions = {
     WeatherDetailComponent,
     CityListComponent,
     DarkModeToggleComponent,
+    RemainingSunTimeComponent,
   ],
   imports: [
     BrowserModule,
