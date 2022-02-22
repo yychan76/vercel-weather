@@ -133,6 +133,11 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
       'NW',
       'NNW',
     ];
+    // offset for fitting into the cardinal brackets
+    // N: 348.75 - 11.25
+    // NNE: 11.25 - 33.75
+    // http://snowfence.umn.edu/Components/winddirectionanddegrees.htm
+    degree += 11.25;
     // conform to 0-360
     degree = degree < 0 ? 360 - (Math.abs(degree) % 360) : degree % 360;
     return `${directions[(degree / 22.5) | 0]}`;
