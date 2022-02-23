@@ -40,9 +40,13 @@ export class RemainingSunTimeComponent implements OnInit {
       : this.next_sunrises[1];
     // assume prev sunset does not change much from current sunset, otherwise
     // need to do another fetch to get historic data
-    let prev_sunset = moment(this.sunset * 1000).subtract(1, 'days');
-    // console.log('prev_sunset', prev_sunset);
-    // console.log('next_sunrise', next_sunrise);
+    // depending on the time data is fetched, the sunset can be before current time,
+    // if so, use it directly or else subtract 1 day to get previous sunset
+    let prev_sunset = moment(this.sunset * 1000).isBefore(moment())
+      ? moment(this.sunset * 1000)
+      : moment(this.sunset * 1000).subtract(1, 'days');
+    console.log('prev_sunset: ', prev_sunset.toString());
+    console.log('next_sunrise: ', moment(next_sunrise * 1000).toString());
     this.nextEvent = this.isDay() ? 'Sunset' : 'Sunrise';
     this.timeToNextEvent = this.isDay()
       ? moment
