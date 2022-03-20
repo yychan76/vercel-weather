@@ -13,3 +13,17 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+
+.gif-image-parent {
+  position: relative;
+}
+
+.attribution-mark {
+  position: absolute;
+  right: -15px;
+  bottom: 0px;
+}
+
+a {
+  color: rgb(101, 124, 255);
+}

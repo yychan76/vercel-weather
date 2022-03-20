@@ -53,7 +53,10 @@
       </mat-card-title-group>
     </ng-template>
   </mat-card-header>
-  <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title" />
+  <div class="gif-image-parent">
+    <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title" />
+    <img class="attribution-mark" src="assets/Poweredby_100px-White_VertLogo.png" alt="Powered by Giphy">
+  </div>
   <mat-card-content>
     <mat-list *ngIf="weather.temperature">
       <div mat-subheader>Temperatures</div>
@@ -206,7 +209,7 @@
         <div mat-line>{{ getCacheAge(weather?.timestamp || 0) }}</div>
       </mat-list-item>
     </mat-list>
-    <mat-card-actions>
+    <mat-card-actions align="end">
       <button mat-raised-button color="primary" (click)="goBack()">Back</button>
     </mat-card-actions>
     <mat-accordion>
@@ -220,5 +223,6 @@
         <pre>{{ weather | json }}</pre>
       </mat-expansion-panel>
     </mat-accordion>
+    <a href="https://www.flaticon.com/free-icons/weather" title="weather icons">Weather icons created by GOWI - Flaticon</a>
   </mat-card-content>
 </mat-card>
