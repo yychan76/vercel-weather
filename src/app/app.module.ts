@@ -15,6 +15,8 @@ import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoggerService } from './common/services/logger.service';
 import { RemainingSunTimeComponent } from './components/remaining-sun-time/remaining-sun-time.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
@@ -45,6 +47,12 @@ const extraOptions: ExtraOptions = {
     FlexLayoutModule,
     HttpClientModule,
     FontAwesomeModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [LoggerService],
   bootstrap: [AppComponent],
