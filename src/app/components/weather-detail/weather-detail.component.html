@@ -34,8 +34,14 @@
       <mat-card-subtitle>
         {{ weather?.main }}, {{ weather?.description }}
       </mat-card-subtitle>
-      <mat-card-subtitle *ngIf="weather.sunrise && weather.sunset && weather.next_sunrises">
-        <app-remaining-sun-time [sunrise]="weather.sunrise" [sunset]="weather.sunset" [next_sunrises]="weather.next_sunrises"></app-remaining-sun-time>
+      <mat-card-subtitle
+        *ngIf="weather.sunrise && weather.sunset && weather.next_sunrises"
+      >
+        <app-remaining-sun-time
+          [sunrise]="weather.sunrise"
+          [sunset]="weather.sunset"
+          [next_sunrises]="weather.next_sunrises"
+        ></app-remaining-sun-time>
       </mat-card-subtitle>
     </mat-card-title-group>
     <ng-template #elseBlock>
@@ -166,18 +172,24 @@
           <mat-icon mat-list-icon>crisis_alert</mat-icon>
           <mat-list>
             <mat-list-item *ngFor="let a of weather.alerts; last as last">
-              <mat-icon mat-list-icon color="warn">priority_high</mat-icon>
-              <div mat-line class="pre-wrap"><strong>Event: &nbsp;</strong> {{ a?.event | titlecase }}</div>
+              <div mat-line>
+                <mat-icon color="warn">priority_high</mat-icon>
+              </div>
+              <div mat-line class="pre-wrap">
+                <strong>Event: &nbsp;</strong> {{ a?.event | titlecase }}
+              </div>
+
               <div mat-line class="pre-wrap">
                 <strong>Agency: &nbsp;</strong> {{ a?.sender_name }}
               </div>
               <div mat-line class="pre-wrap">
                 <strong>Duration: &nbsp;</strong>
-                {{ (a.start ? a.start * 1000 : 0) | date: "MMM d, y, h:mm a" }} &mdash;
+                <br />{{ (a.start ? a.start * 1000 : 0) | date: "MMM d, y, h:mm a" }}
+                &mdash;
                 {{ (a.end ? a.end * 1000 : 0) | date: "MMM d, y, h:mm a z" }}
               </div>
               <div mat-line>
-                <br>
+                <br />
                 <strong>Description:</strong>
               </div>
               <div mat-line class="pre-wrap">{{ a?.description }}</div>
