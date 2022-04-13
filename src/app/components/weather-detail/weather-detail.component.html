@@ -113,9 +113,19 @@
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>air</mat-icon>
           <div mat-line>Speed</div>
-          <div mat-line>{{ weather?.wind_speed }} m/s</div>
+          <div mat-line>
+            {{ weather?.wind_speed }} m/s &nbsp; ({{
+              (weather.wind_speed ? weather.wind_speed * 3.6 : 0)
+                | number: "1.2-2"
+            }}
+            km/h)
+          </div>
           <div mat-line *ngIf="weather.wind_gust">
-            <em>{{ "Gust: " + weather.wind_gust + " m/s" }}</em>
+            <em
+              >{{ "Gust: " + weather.wind_gust + " m/s" }} ({{
+                (weather.wind_gust * 3.6 | number: "1.2-2") + " km/h"
+              }})
+            </em>
           </div>
         </mat-list-item>
         <mat-list-item fxFlex>
