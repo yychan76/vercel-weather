@@ -55,7 +55,11 @@
   </mat-card-header>
   <div class="gif-image-parent">
     <img mat-card-image [src]="weather?.gif_url" [alt]="weather?.gif_title" />
-    <img class="attribution-mark" src="assets/Poweredby_100px-White_VertLogo.png" alt="Powered by Giphy">
+    <img
+      class="attribution-mark"
+      src="assets/Poweredby_100px-White_VertLogo.png"
+      alt="Powered by Giphy"
+    />
   </div>
   <mat-card-content>
     <mat-list *ngIf="weather.temperature">
@@ -179,6 +183,142 @@
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
+      <div mat-subheader>Hourly Forecast</div>
+      <div fxLayout="row" class="hourly-container">
+        <mat-card *ngFor="let hourly of weather.hourly" class="hourly">
+          <!-- {{ hourly | json }} -->
+          <mat-card-header>
+            <mat-card-subtitle>
+              <img
+                class="weather-avatar"
+                [src]="
+                  hourly.weather[0].icon
+                    ? 'https://openweathermap.org/img/wn/' +
+                      hourly.weather[0]?.icon +
+                      '@4x.png'
+                    : 'assets/Exclamation_Circle_Red.svg'
+                "
+                [alt]="hourly.weather[0].description"
+              />
+            </mat-card-subtitle>
+            <mat-card-title>
+              {{ hourly.temp | number: "1.0-1" }} &#176;C
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ hourly.weather[0].description | titlecase }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>umbrella</mat-icon>
+              {{ hourly.pop | percent }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>water_drop</mat-icon>
+              {{ weather?.humidity }} %
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>speed</mat-icon>
+              {{ hourly?.pressure }} hPa
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>air</mat-icon>
+              {{
+                (hourly.wind_speed ? hourly.wind_speed * 3.6 : 0)
+                  | number: "1.0-1"
+              }}
+              km/h
+              <span *ngIf="hourly.wind_gust">
+                <br>
+                <em
+                  >{{
+                    "Gust: " +
+                      (hourly.wind_gust * 3.6 | number: "1.0-1") +
+                      " km/h"
+                  }}
+                </em>
+              </span>
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>explore</mat-icon>
+              <mat-icon
+                [style]="
+                  'transform: rotate(' +
+                  hourly?.wind_deg +
+                  'deg); vertical-align: text-top'
+                "
+                >south</mat-icon
+              >
+              <!-- {{ hourly?.wind_deg }} &deg; &nbsp; -->
+              {{ degreeToDirection(hourly?.wind_deg || 0) }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>new_releases</mat-icon>
+              {{ hourly?.uvi | number: "1.1-1" }} &nbsp;
+              <span [style]="uvIndexLabelStyle(hourly?.uvi || 0)">
+                {{ uvIndexLabel(hourly?.uvi || 0) }}
+              </span>
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              {{ hourly.dt * 1000 | date: "h a" }}
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <div mat-subheader>Daily Forecast</div>
+      <div fxLayout="row" class="daily-container">
+        <mat-card *ngFor="let daily of weather.daily" class="daily">
+          <!-- {{ hourly | json }} -->
+          <mat-card-header>
+            <mat-card-subtitle>
+              <img
+                class="weather-avatar"
+                [src]="
+                  daily.weather[0].icon
+                    ? 'https://openweathermap.org/img/wn/' +
+                      daily.weather[0]?.icon +
+                      '@4x.png'
+                    : 'assets/Exclamation_Circle_Red.svg'
+                "
+                [alt]="daily.weather[0].description"
+              />
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              {{ daily.weather[0].description | titlecase }}
+            </mat-card-subtitle>
+            <mat-card-title>
+              <mat-icon mat-list-icon>wb_sunny</mat-icon>
+              {{ daily.temp.day | number: "1.1-1" }} &#176;C
+            </mat-card-title>
+            <mat-card-title>
+              <mat-icon mat-list-icon>nights_stay</mat-icon>
+              {{ daily.temp.night | number: "1.1-1" }} &#176;C
+            </mat-card-title>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>umbrella</mat-icon>
+              {{ daily.pop | percent }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>water_drop</mat-icon>
+              {{ weather?.humidity }} %
+            </mat-card-subtitle>
+            <!-- <mat-card-subtitle>
+              <mat-icon mat-list-icon>speed</mat-icon>
+              {{ daily?.pressure }} hPa
+            </mat-card-subtitle>
+
+            <mat-card-subtitle>
+              <mat-icon mat-list-icon>new_releases</mat-icon>
+              {{ daily?.uvi | number: "1.0-1" }} &nbsp;
+              <span [style]="uvIndexLabelStyle(daily?.uvi || 0)">
+                {{ uvIndexLabel(daily?.uvi || 0) }}
+              </span>
+            </mat-card-subtitle> -->
+            <mat-card-subtitle>
+              {{ daily.dt * 1000 | date: "MMM d" }}
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <mat-divider></mat-divider>
       <div *ngIf="weather?.alerts">
         <div mat-subheader>Alerts</div>
         <mat-list-item>
@@ -197,7 +337,9 @@
               </div>
               <div mat-line class="pre-wrap">
                 <strong>Duration: &nbsp;</strong>
-                <br />{{ (a.start ? a.start * 1000 : 0) | date: "MMM d, y, h:mm a" }}
+                <br />{{
+                  (a.start ? a.start * 1000 : 0) | date: "MMM d, y, h:mm a"
+                }}
                 &mdash;
                 {{ (a.end ? a.end * 1000 : 0) | date: "MMM d, y, h:mm a z" }}
               </div>
@@ -233,6 +375,8 @@
         <pre>{{ weather | json }}</pre>
       </mat-expansion-panel>
     </mat-accordion>
-    <a href="https://www.flaticon.com/free-icons/weather" title="weather icons">Weather icons created by GOWI - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/weather" title="weather icons"
+      >Weather icons created by GOWI - Flaticon</a
+    >
   </mat-card-content>
 </mat-card>

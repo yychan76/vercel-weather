@@ -61,6 +61,8 @@ app.get("/api/weather/:city", (req, res) => {
             sunset: result.current.sunset,
             next_sunrises: [result.daily[0].sunrise, result.daily[1].sunrise],
             alerts: result.alerts,
+            hourly: result.hourly,
+            daily: result.daily,
             timestamp: result.current.dt,
             query_timestamp: new Date().getTime(),
           });

@@ -27,3 +27,24 @@
 a {
   color: rgb(101, 124, 255);
 }
+
+.hourly-container,
+.daily-container {
+  width: auto;
+  height: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.hourly {
+  min-width: 180px;
+}
+
+.daily {
+  min-width: 140px;
+}
+
+.weather-avatar {
+  width: 86px;
+  height: 86px;
+}
