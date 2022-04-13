@@ -215,12 +215,13 @@
                 [alt]="hourly.weather[0].description"
               />
             </mat-card-subtitle>
-            <mat-card-title>
-              {{ hourly.temp | number: "1.0-1" }} &#176;C
-            </mat-card-title>
             <mat-card-subtitle>
               {{ hourly.weather[0].description | titlecase }}
             </mat-card-subtitle>
+            <mat-card-title>
+              <mat-icon mat-list-icon>thermostat</mat-icon>
+              {{ hourly.temp | number: "1.0-1" }} &#176;C
+            </mat-card-title>
             <mat-card-subtitle>
               <mat-icon mat-list-icon>umbrella</mat-icon>
               {{ hourly.pop | percent }}
