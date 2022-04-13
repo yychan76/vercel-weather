@@ -42,6 +42,7 @@ app.get("/api/weather/:city", (req, res) => {
             cityName: cityName,
             lat: result.lat,
             lon: result.lon,
+            timezone_offset: result.timezone_offset,
             country: country,
             main: weather.main,
             description: weather.description,

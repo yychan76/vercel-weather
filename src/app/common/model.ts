@@ -2,6 +2,7 @@ export interface Weather {
   cityName: string;
   lat: number;
   lon: number;
+  timezone_offset: number;
   country: string;
   main: string;
   description: string;

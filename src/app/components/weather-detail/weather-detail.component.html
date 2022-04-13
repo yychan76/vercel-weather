@@ -3,7 +3,13 @@
     <div
       mat-card-avatar
       [style.backgroundSize]="'cover'"
-      [style.backgroundColor]="getTimeOfDayColor(weather)"
+      [style.backgroundColor]="
+        getTimeOfDayColor(
+          weather.sunrise,
+          weather.sunset,
+          weather.timezone_offset
+        )
+      "
       [style.backgroundImage]="
         weather.icon
           ? 'url(https://openweathermap.org/img/wn/' +
@@ -191,6 +197,14 @@
             <mat-card-subtitle>
               <img
                 class="weather-avatar"
+                [style.backgroundColor]="
+                  getTimeOfDayColor(
+                    weather.daily[0].sunrise,
+                    weather.daily[0].sunset,
+                    weather.timezone_offset,
+                    hourly.dt
+                  )
+                "
                 [src]="
                   hourly.weather[0].icon
                     ? 'https://openweathermap.org/img/wn/' +
@@ -227,7 +241,7 @@
               }}
               km/h
               <span *ngIf="hourly.wind_gust">
-                <br>
+                <br />
                 <em
                   >{{
                     "Gust: " +
@@ -271,6 +285,7 @@
             <mat-card-subtitle>
               <img
                 class="weather-avatar"
+                [style.backgroundColor]="'burlywood'"
                 [src]="
                   daily.weather[0].icon
                     ? 'https://openweathermap.org/img/wn/' +

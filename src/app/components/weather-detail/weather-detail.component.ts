@@ -101,11 +101,24 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     return `${timeDiff} at ${timestampDate}`;
   }
 
-  getTimeOfDayColor(weather: Weather): string {
+  getTimeOfDayColor(sunrise: number, sunset: number, utcOffsetSeconds: number, timestamp: number=0): string {
+    const timeFormat = "HH:mm:ss"
+    const utcOffsetHours = utcOffsetSeconds / 3600;
+    var momentObj;
+    if (timestamp == 0) {
+      momentObj = moment(moment().utcOffset(utcOffsetHours).format(timeFormat), timeFormat);
+    } else {
+      momentObj = moment(moment.unix(timestamp).utcOffset(utcOffsetHours).format(timeFormat), timeFormat);
+    }
+    const sunriseMoment = moment(moment.unix(sunrise).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
+    const sunsetMoment = moment(moment.unix(sunset).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
+    console.log("getTimeOfDayColor", momentObj);
+    console.log("sunrise", sunriseMoment)
+    console.log("sunset", sunsetMoment)
     if (
-      moment().isBetween(
-        moment(weather.sunrise * 1000),
-        moment(weather.sunset * 1000)
+      momentObj.isBetween(
+        sunriseMoment,
+        sunsetMoment
       )
     ) {
       return 'burlywood';
