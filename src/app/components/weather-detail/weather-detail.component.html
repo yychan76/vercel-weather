@@ -75,14 +75,18 @@
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Temperature</div>
           <div mat-line>
-            {{ weather?.temperature | number: "1.2-2" }} &#176;C
+            <span class="current-data-text">
+              {{ weather?.temperature | number: "1.2-2" }} &#176;C
+            </span>
           </div>
         </mat-list-item>
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Feels Like</div>
           <div mat-line>
-            {{ weather?.feels_like | number: "1.2-2" }} &#176;C
+            <span class="current-data-text">
+              {{ weather?.feels_like | number: "1.2-2" }} &#176;C
+            </span>
           </div>
         </mat-list-item>
       </div>
@@ -90,12 +94,20 @@
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>Low</div>
-          <div mat-line>{{ weather?.temp_min | number: "1.2-2" }} &#176;C</div>
+          <div mat-line>
+            <span class="current-data-text">
+              {{ weather?.temp_min | number: "1.2-2" }} &#176;C
+            </span>
+          </div>
         </mat-list-item>
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>thermostat</mat-icon>
           <div mat-line>High</div>
-          <div mat-line>{{ weather?.temp_max | number: "1.2-2" }} &#176;C</div>
+          <div mat-line>
+            <span class="current-data-text">
+              {{ weather?.temp_max | number: "1.2-2" }} &#176;C
+            </span>
+          </div>
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
@@ -104,17 +116,25 @@
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>water_drop</mat-icon>
           <div mat-line>Humidity</div>
-          <div mat-line>{{ weather?.humidity }} %</div>
+          <div mat-line>
+            <span class="current-data-text"> {{ weather?.humidity }}% RH </span>
+          </div>
         </mat-list-item>
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>speed</mat-icon>
           <div mat-line>Pressure</div>
-          <div mat-line>{{ weather?.pressure }} hPa</div>
+          <div mat-line>
+            <span class="current-data-text"> {{ weather?.pressure }} hPa </span>
+          </div>
         </mat-list-item>
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>grain</mat-icon>
           <div mat-line>Dew Point</div>
-          <div mat-line>{{ weather?.dew_point | number: "1.2-2" }} &#176;C</div>
+          <div mat-line>
+            <span class="current-data-text">
+              {{ weather?.dew_point | number: "1.2-2" }} &#176;C
+            </span>
+          </div>
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
@@ -124,11 +144,13 @@
           <mat-icon mat-list-icon>air</mat-icon>
           <div mat-line>Speed</div>
           <div mat-line>
-            {{ weather?.wind_speed }} m/s &nbsp; ({{
-              (weather.wind_speed ? weather.wind_speed * 3.6 : 0)
-                | number: "1.2-2"
-            }}
-            km/h)
+            <span class="current-data-text">
+              {{
+                (weather.wind_speed ? weather.wind_speed * 3.6 : 0)
+                  | number: "1.2-2"
+              }}
+              km/h
+            </span>
           </div>
           <div mat-line *ngIf="weather.wind_gust">
             <em
@@ -142,16 +164,18 @@
           <mat-icon mat-list-icon>explore</mat-icon>
           <div mat-line>Direction</div>
           <div mat-line>
-            <mat-icon
-              [style]="
-                'transform: rotate(' +
-                weather?.wind_dir +
-                'deg); vertical-align: text-top'
-              "
-              >south</mat-icon
-            >
-            {{ weather?.wind_dir }} &deg; &nbsp;
-            {{ degreeToDirection(weather?.wind_dir || 0) }}
+            <span class="current-data-text">
+              <mat-icon
+                [style]="
+                  'transform: rotate(' +
+                  weather?.wind_dir +
+                  'deg); vertical-align: text-top'
+                "
+                >south</mat-icon
+              >
+              {{ weather?.wind_dir }} &deg; &nbsp;
+              {{ degreeToDirection(weather?.wind_dir || 0) }}
+            </span>
           </div>
         </mat-list-item>
       </div>
@@ -162,9 +186,11 @@
           <mat-icon mat-list-icon>new_releases</mat-icon>
           <div mat-line>UV Index</div>
           <div mat-line>
-            {{ weather?.uvi }} &nbsp;
-            <span [style]="uvIndexLabelStyle(weather?.uvi || 0)">
-              {{ uvIndexLabel(weather?.uvi || 0) }}
+            <span class="current-data-text">
+              {{ weather?.uvi }} &nbsp;
+              <span [style]="uvIndexLabelStyle(weather?.uvi || 0)">
+                {{ uvIndexLabel(weather?.uvi || 0) }}
+              </span>
             </span>
           </div>
         </mat-list-item>
@@ -172,19 +198,24 @@
           <mat-icon mat-list-icon>light_mode</mat-icon>
           <div mat-line>Sunrise</div>
           <div mat-line>
-            {{
-              (weather.sunrise ? weather.sunrise * 1000 : 0)
-                | date: "mediumTime"
-            }}
+            <span class="current-data-text">
+              {{
+                (weather.sunrise ? weather.sunrise * 1000 : 0)
+                  | date: "mediumTime"
+              }}
+            </span>
           </div>
         </mat-list-item>
         <mat-list-item fxFlex>
           <mat-icon mat-list-icon>bedtime</mat-icon>
           <div mat-line>Sunset</div>
           <div mat-line>
-            {{
-              (weather.sunset ? weather.sunset * 1000 : 0) | date: "mediumTime"
-            }}
+            <span class="current-data-text">
+              {{
+                (weather.sunset ? weather.sunset * 1000 : 0)
+                  | date: "mediumTime"
+              }}
+            </span>
           </div>
         </mat-list-item>
       </div>
@@ -224,15 +255,19 @@
 
               <mat-list-item>
                 <mat-icon mat-list-icon>thermostat</mat-icon>
-                <div mat-line>{{ hourly.temp | number: "1.0-1" }} &#176;C</div>
+                <div mat-line>
+                  <span class="temperature-text">
+                    {{ hourly.temp | number: "1.0-1" }} &#176;C
+                  </span>
+                </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Probability of Precipitation">
                 <mat-icon mat-list-icon>umbrella</mat-icon>
-                <div mat-line>{{ hourly.pop | percent }}</div>
+                <div mat-line>{{ hourly.pop | percent }} pptn.</div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Relative Humidity">
                 <mat-icon mat-list-icon>water_drop</mat-icon>
-                <div mat-line>{{ weather?.humidity }} %</div>
+                <div mat-line>{{ weather?.humidity }}% RH</div>
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>speed</mat-icon>
@@ -246,7 +281,7 @@
                       | number: "1.0-1"
                   }}
                   km/h
-                  <span *ngIf="hourly.wind_gust">
+                  <span *ngIf="hourly.wind_gust" class="gust-text">
                     <br />
                     <em
                       >{{
@@ -321,24 +356,26 @@
               <mat-list-item>
                 <mat-icon mat-list-icon>wb_sunny</mat-icon>
                 <div mat-line>
-                  {{ daily.temp.day | number: "1.1-1" }} &#176;C
+                  <span class="temperature-text">
+                    {{ daily.temp.day | number: "1.1-1" }} &#176;C
+                  </span>
                 </div>
               </mat-list-item>
               <mat-list-item>
                 <mat-icon mat-list-icon>nights_stay</mat-icon>
                 <div mat-line>
-                  {{ daily.temp.night | number: "1.1-1" }} &#176;C
+                  <span class="temperature-text">
+                    {{ daily.temp.night | number: "1.1-1" }} &#176;C
+                  </span>
                 </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Probability of Precipitation">
                 <mat-icon mat-list-icon>umbrella</mat-icon>
-                <div mat-line>
-                  {{ daily.pop | percent }}
-                </div>
+                <div mat-line>{{ daily.pop | percent }} pptn.</div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Relative Humidity">
                 <mat-icon mat-list-icon>water_drop</mat-icon>
-                <div mat-line>{{ weather?.humidity }} %</div>
+                <div mat-line>{{ weather?.humidity }}% RH</div>
               </mat-list-item>
               <!-- <mat-list-item>
                 <mat-icon mat-list-icon>speed</mat-icon>

@@ -61,11 +61,23 @@ a {
   .mat-list-base.less-padding
   .mat-list-item
   .mat-list-item-content {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+:host
+  ::ng-deep
+  .mat-list-base.less-padding
+  .mat-list-item
+  .mat-list-item-content
+  .mat-list-text {
   padding-left: 8px !important;
+  padding-right: 8px !important;
 }
 
 :host ::ng-deep .mat-card-header.less-margin .mat-card-header-text {
-  margin-left: 4px !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
 }
 
 .weather-avatar {
@@ -80,5 +92,20 @@ figure {
 
 figcaption {
   font-size: 12px;
+  text-align: center;
+}
+
+.current-data-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.temperature-text {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.gust-text {
+  font-size: 14px;
   text-align: center;
 }
