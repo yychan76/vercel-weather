@@ -112,9 +112,9 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     }
     const sunriseMoment = moment(moment.unix(sunrise).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
     const sunsetMoment = moment(moment.unix(sunset).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
-    console.log("getTimeOfDayColor", momentObj);
-    console.log("sunrise", sunriseMoment)
-    console.log("sunset", sunsetMoment)
+    // console.log("getTimeOfDayColor", momentObj);
+    // console.log("sunrise", sunriseMoment)
+    // console.log("sunset", sunsetMoment)
     if (
       momentObj.isBetween(
         sunriseMoment,

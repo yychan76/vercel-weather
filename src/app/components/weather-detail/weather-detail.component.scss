@@ -44,8 +44,41 @@ a {
   min-width: 140px;
 }
 
+.mat-list.hourly-list .mat-list-item {
+  height: 34px; /* default is 72px */
+}
+
+.mat-list.hourly-list .mat-list-item.double-height {
+  height: 58px; /* default is 72px */
+}
+
+.mat-list.daily-list .mat-list-item {
+  height: 34px; /* default is 72px */
+}
+
+:host
+  ::ng-deep
+  .mat-list-base.less-padding
+  .mat-list-item
+  .mat-list-item-content {
+  padding-left: 8px !important;
+}
+
+:host ::ng-deep .mat-card-header.less-margin .mat-card-header-text {
+  margin-left: 4px !important;
+}
+
 .weather-avatar {
   width: 86px;
   height: 86px;
   border-radius: 50%;
+}
+
+figure {
+  margin: auto;
+}
+
+figcaption {
+  font-size: 12px;
+  text-align: center;
 }
