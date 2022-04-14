@@ -253,7 +253,7 @@
                 </figure>
               </mat-list-item>
 
-              <mat-list-item>
+              <mat-list-item matTooltip="Temperature">
                 <mat-icon mat-list-icon>thermostat</mat-icon>
                 <div mat-line>
                   <span class="temperature-text">
@@ -269,11 +269,11 @@
                 <mat-icon mat-list-icon>water_drop</mat-icon>
                 <div mat-line>{{ weather?.humidity }}% RH</div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Atmospheric pressure on the sea level">
                 <mat-icon mat-list-icon>speed</mat-icon>
                 <div mat-line>{{ hourly?.pressure }} hPa</div>
               </mat-list-item>
-              <mat-list-item class="double-height">
+              <mat-list-item class="double-height" matTooltip="Wind Speed">
                 <mat-icon mat-list-icon>air</mat-icon>
                 <div mat-line>
                   {{
@@ -293,7 +293,7 @@
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Wind Direction">
                 <mat-icon mat-list-icon>explore</mat-icon>
                 <div mat-line>
                   <mat-icon
@@ -308,7 +308,7 @@
                   {{ degreeToDirection(hourly?.wind_deg || 0) }}
                 </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="UV Index">
                 <mat-icon mat-list-icon>new_releases</mat-icon>
                 <div mat-line>
                   {{ hourly?.uvi | number: "1.1-1" }} &nbsp;
@@ -317,10 +317,15 @@
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item class="double-height">
                 <mat-icon mat-list-icon>schedule</mat-icon>
                 <div mat-line>
                   {{ hourly.dt * 1000 | date: "h a" }}
+                </div>
+                <div mat-line>
+                  <span class="small-text">
+                    {{ hourly.dt * 1000 | date: "MMM dd" }}
+                  </span>
                 </div>
               </mat-list-item>
             </mat-list>
@@ -353,7 +358,7 @@
                 </figure>
               </mat-list-item>
 
-              <mat-list-item>
+              <mat-list-item matTooltip="Day Temperature">
                 <mat-icon mat-list-icon>wb_sunny</mat-icon>
                 <div mat-line>
                   <span class="temperature-text">
@@ -361,7 +366,7 @@
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item matTooltip="Night Temperature">
                 <mat-icon mat-list-icon>nights_stay</mat-icon>
                 <div mat-line>
                   <span class="temperature-text">
