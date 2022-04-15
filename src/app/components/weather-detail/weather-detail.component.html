@@ -253,28 +253,40 @@
                 </figure>
               </mat-list-item>
 
-              <mat-list-item matTooltip="Temperature">
-                <mat-icon mat-list-icon>thermostat</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Temperature"
+                  >thermostat</mat-icon
+                >
                 <div mat-line>
                   <span class="temperature-text">
                     {{ hourly.temp | number: "1.0-1" }} &#176;C
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item matTooltip="Probability of Precipitation">
-                <mat-icon mat-list-icon>umbrella</mat-icon>
+              <mat-list-item>
+                <mat-icon
+                  mat-list-icon
+                  matTooltip="Probability of Precipitation"
+                  >umbrella</mat-icon
+                >
                 <div mat-line>{{ hourly.pop | percent }} pptn.</div>
               </mat-list-item>
-              <mat-list-item matTooltip="Relative Humidity">
-                <mat-icon mat-list-icon>water_drop</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Relative Humidity"
+                  >water_drop</mat-icon
+                >
                 <div mat-line>{{ weather?.humidity }}% RH</div>
               </mat-list-item>
-              <mat-list-item matTooltip="Atmospheric pressure on the sea level">
-                <mat-icon mat-list-icon>speed</mat-icon>
+              <mat-list-item>
+                <mat-icon
+                  mat-list-icon
+                  matTooltip="Atmospheric pressure on the sea level"
+                  >speed</mat-icon
+                >
                 <div mat-line>{{ hourly?.pressure }} hPa</div>
               </mat-list-item>
-              <mat-list-item class="double-height" matTooltip="Wind Speed">
-                <mat-icon mat-list-icon>air</mat-icon>
+              <mat-list-item class="double-height">
+                <mat-icon mat-list-icon matTooltip="Wind Speed">air</mat-icon>
                 <div mat-line>
                   {{
                     (hourly.wind_speed ? hourly.wind_speed * 3.6 : 0)
@@ -293,8 +305,10 @@
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item matTooltip="Wind Direction">
-                <mat-icon mat-list-icon>explore</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Wind Direction"
+                  >explore</mat-icon
+                >
                 <div mat-line>
                   <mat-icon
                     [style]="
@@ -308,8 +322,10 @@
                   {{ degreeToDirection(hourly?.wind_deg || 0) }}
                 </div>
               </mat-list-item>
-              <mat-list-item matTooltip="UV Index">
-                <mat-icon mat-list-icon>new_releases</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="UV Index"
+                  >new_releases</mat-icon
+                >
                 <div mat-line>
                   {{ hourly?.uvi | number: "1.1-1" }} &nbsp;
                   <span [style]="uvIndexLabelStyle(hourly?.uvi || 0)">
@@ -358,28 +374,38 @@
                 </figure>
               </mat-list-item>
 
-              <mat-list-item matTooltip="Day Temperature">
-                <mat-icon mat-list-icon>wb_sunny</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Day Temperature"
+                  >wb_sunny</mat-icon
+                >
                 <div mat-line>
                   <span class="temperature-text">
                     {{ daily.temp.day | number: "1.1-1" }} &#176;C
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item matTooltip="Night Temperature">
-                <mat-icon mat-list-icon>nights_stay</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Night Temperature"
+                  >nights_stay</mat-icon
+                >
                 <div mat-line>
                   <span class="temperature-text">
                     {{ daily.temp.night | number: "1.1-1" }} &#176;C
                   </span>
                 </div>
               </mat-list-item>
-              <mat-list-item matTooltip="Probability of Precipitation">
-                <mat-icon mat-list-icon>umbrella</mat-icon>
+              <mat-list-item>
+                <mat-icon
+                  mat-list-icon
+                  matTooltip="Probability of Precipitation"
+                  >umbrella</mat-icon
+                >
                 <div mat-line>{{ daily.pop | percent }} pptn.</div>
               </mat-list-item>
-              <mat-list-item matTooltip="Relative Humidity">
-                <mat-icon mat-list-icon>water_drop</mat-icon>
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Relative Humidity"
+                  >water_drop</mat-icon
+                >
                 <div mat-line>{{ weather?.humidity }}% RH</div>
               </mat-list-item>
               <!-- <mat-list-item>
