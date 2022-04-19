@@ -153,10 +153,10 @@
             </span>
           </div>
           <div mat-line *ngIf="weather.wind_gust">
-            <em
-              >{{ "Gust: " + weather.wind_gust + " m/s" }} ({{
-                (weather.wind_gust * 3.6 | number: "1.2-2") + " km/h"
-              }})
+            <em>
+              {{
+                "Gust: " + (weather.wind_gust * 3.6 | number: "1.2-2") + " km/h"
+              }}
             </em>
           </div>
         </mat-list-item>
@@ -220,7 +220,7 @@
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
-      <div mat-subheader>Hourly Forecast</div>
+      <div mat-subheader>Hourly Forecast (Next 48 hrs)</div>
       <div fxLayout="row" class="hourly-container">
         <mat-card *ngFor="let hourly of weather.hourly" class="hourly">
           <!-- {{ hourly | json }} -->
