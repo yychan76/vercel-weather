@@ -56,6 +56,11 @@ a {
   height: 34px; /* default is 72px */
 }
 
+:host ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
 :host
   ::ng-deep
   .mat-list-base.less-padding
@@ -112,4 +117,8 @@ figcaption {
 .gust-text {
   font-size: 14px;
   text-align: center;
+}
+
+pre {
+  overflow-x: scroll;
 }
