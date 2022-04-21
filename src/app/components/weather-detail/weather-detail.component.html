@@ -237,220 +237,250 @@
           </div>
         </mat-list-item>
       </div>
-      <mat-divider></mat-divider>
-      <div mat-subheader>Minutely Forecast (Next 1 hr)</div>
-      <div fxLayout="row" class="minutely-container">
-        <mat-card *ngFor="let minutely of weather.minutely" class="minutely">
-          <!-- {{ minutely | json }} -->
-          <mat-card-header class="less-margin">
-            <mat-list class="minutely-list less-padding">
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Precipitation"
-                  >{{weather?.snow ? 'ac_unit' : 'cloudy_snowing'}}</mat-icon
-                >
-                <div mat-line>
-                  {{ minutely.precipitation | number: "1.0-1" }} mm
-                </div>
-              </mat-list-item>
-              <mat-list-item class="double-height">
-                <mat-icon mat-list-icon>schedule</mat-icon>
-                <div mat-line>
-                  {{ minutely.dt * 1000 | date: "h:mm a" }}
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </mat-card-header>
-        </mat-card>
+      <div *ngIf="weather.minutely">
+        <mat-divider></mat-divider>
+        <div mat-subheader>Minutely Forecast (Next 1 hr)</div>
+        <div
+          fxLayout="row"
+          class="minutely-container"
+          *ngIf="hasPrecipitation(weather.minutely); else noPrecipitationBlock"
+        >
+          <mat-card *ngFor="let minutely of weather.minutely" class="minutely">
+            <!-- {{ minutely | json }} -->
+            <mat-card-header class="less-margin">
+              <mat-list class="minutely-list less-padding">
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Precipitation">{{
+                    weather?.snow ? "ac_unit" : "cloudy_snowing"
+                  }}</mat-icon>
+                  <div mat-line>
+                    {{ minutely.precipitation | number: "1.0-1" }} mm
+                  </div>
+                </mat-list-item>
+                <mat-list-item class="double-height">
+                  <mat-icon mat-list-icon>schedule</mat-icon>
+                  <div mat-line>
+                    {{ minutely.dt * 1000 | date: "h:mm a" }}
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        <ng-template #noPrecipitationBlock>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon mat-list-icon>{{
+                isDayTime(
+                  weather.daily[0].sunrise,
+                  weather.daily[0].sunset,
+                  weather.timezone_offset,
+                  weather.hourly[0].dt
+                )
+                  ? "sunny"
+                  : "nights_stay"
+              }}</mat-icon>
+              <div mat-line class="no-precipitation-text">
+                No precipitation for the next 1 hour
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </ng-template>
       </div>
-      <div mat-subheader>Hourly Forecast (Next 48 hrs)</div>
-      <div fxLayout="row" class="hourly-container">
-        <mat-card *ngFor="let hourly of weather.hourly" class="hourly">
-          <!-- {{ hourly | json }} -->
-          <mat-card-header class="less-margin">
-            <mat-list class="hourly-list less-padding">
-              <mat-list-item style="height: 140px">
-                <figure>
-                  <img
-                    class="weather-avatar"
-                    [style.backgroundColor]="
-                      getTimeOfDayColor(
-                        weather.daily[0].sunrise,
-                        weather.daily[0].sunset,
-                        weather.timezone_offset,
-                        hourly.dt
-                      )
-                    "
-                    [src]="
-                      hourly.weather[0].icon
-                        ? 'https://openweathermap.org/img/wn/' +
-                          hourly.weather[0]?.icon +
-                          '@4x.png'
-                        : 'assets/Exclamation_Circle_Red.svg'
-                    "
-                    [alt]="hourly.weather[0].description"
-                  />
-                  <figcaption>
-                    {{ hourly.weather[0].description | titlecase }}
-                  </figcaption>
-                </figure>
-              </mat-list-item>
+      <div *ngIf="weather.hourly">
+        <mat-divider></mat-divider>
+        <div mat-subheader>Hourly Forecast (Next 48 hrs)</div>
+        <div fxLayout="row" class="hourly-container">
+          <mat-card *ngFor="let hourly of weather.hourly" class="hourly">
+            <!-- {{ hourly | json }} -->
+            <mat-card-header class="less-margin">
+              <mat-list class="hourly-list less-padding">
+                <mat-list-item style="height: 140px">
+                  <figure>
+                    <img
+                      class="weather-avatar"
+                      [style.backgroundColor]="
+                        getTimeOfDayColor(
+                          weather.daily[0].sunrise,
+                          weather.daily[0].sunset,
+                          weather.timezone_offset,
+                          hourly.dt
+                        )
+                      "
+                      [src]="
+                        hourly.weather[0].icon
+                          ? 'https://openweathermap.org/img/wn/' +
+                            hourly.weather[0]?.icon +
+                            '@4x.png'
+                          : 'assets/Exclamation_Circle_Red.svg'
+                      "
+                      [alt]="hourly.weather[0].description"
+                    />
+                    <figcaption>
+                      {{ hourly.weather[0].description | titlecase }}
+                    </figcaption>
+                  </figure>
+                </mat-list-item>
 
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Temperature"
-                  >thermostat</mat-icon
-                >
-                <div mat-line>
-                  <span class="temperature-text">
-                    {{ hourly.temp | number: "1.0-1" }} &#176;C
-                  </span>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon
-                  mat-list-icon
-                  matTooltip="Probability of Precipitation"
-                  >umbrella</mat-icon
-                >
-                <div mat-line>{{ hourly.pop | percent }} pptn.</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Relative Humidity"
-                  >water_drop</mat-icon
-                >
-                <div mat-line>{{ weather?.humidity }}% RH</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon
-                  mat-list-icon
-                  matTooltip="Atmospheric pressure on the sea level"
-                  >speed</mat-icon
-                >
-                <div mat-line>{{ hourly?.pressure }} hPa</div>
-              </mat-list-item>
-              <mat-list-item class="double-height">
-                <mat-icon mat-list-icon matTooltip="Wind Speed">air</mat-icon>
-                <div mat-line>
-                  {{
-                    (hourly.wind_speed ? hourly.wind_speed * 3.6 : 0)
-                      | number: "1.0-1"
-                  }}
-                  km/h
-                  <span *ngIf="hourly.wind_gust" class="gust-text">
-                    <br />
-                    <em
-                      >{{
-                        "Gust: " +
-                          (hourly.wind_gust * 3.6 | number: "1.0-1") +
-                          " km/h"
-                      }}
-                    </em>
-                  </span>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Wind Direction"
-                  >explore</mat-icon
-                >
-                <div mat-line>
-                  <mat-icon
-                    [style]="
-                      'transform: rotate(' +
-                      hourly?.wind_deg +
-                      'deg); vertical-align: text-top'
-                    "
-                    >south</mat-icon
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Temperature"
+                    >thermostat</mat-icon
                   >
-                  <!-- {{ hourly?.wind_deg }} &deg; &nbsp; -->
-                  {{ degreeToDirection(hourly?.wind_deg || 0) }}
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="UV Index"
-                  >new_releases</mat-icon
-                >
-                <div mat-line>
-                  {{ hourly?.uvi | number: "1.1-1" }} &nbsp;
-                  <span [style]="uvIndexLabelStyle(hourly?.uvi || 0)">
-                    {{ uvIndexLabel(hourly?.uvi || 0) }}
-                  </span>
-                </div>
-              </mat-list-item>
-              <mat-list-item class="double-height">
-                <mat-icon mat-list-icon>schedule</mat-icon>
-                <div mat-line>
-                  {{ hourly.dt * 1000 | date: "h a" }}
-                </div>
-                <div mat-line>
-                  <span class="small-text">
-                    {{ hourly.dt * 1000 | date: "MMM dd" }}
-                  </span>
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </mat-card-header>
-        </mat-card>
+                  <div mat-line>
+                    <span class="temperature-text">
+                      {{ hourly.temp | number: "1.0-1" }} &#176;C
+                    </span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon
+                    mat-list-icon
+                    matTooltip="Probability of Precipitation"
+                    >umbrella</mat-icon
+                  >
+                  <div mat-line>{{ hourly.pop | percent }} pptn.</div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Relative Humidity"
+                    >water_drop</mat-icon
+                  >
+                  <div mat-line>{{ weather?.humidity }}% RH</div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon
+                    mat-list-icon
+                    matTooltip="Atmospheric pressure on the sea level"
+                    >speed</mat-icon
+                  >
+                  <div mat-line>{{ hourly?.pressure }} hPa</div>
+                </mat-list-item>
+                <mat-list-item class="double-height">
+                  <mat-icon mat-list-icon matTooltip="Wind Speed">air</mat-icon>
+                  <div mat-line>
+                    {{
+                      (hourly.wind_speed ? hourly.wind_speed * 3.6 : 0)
+                        | number: "1.0-1"
+                    }}
+                    km/h
+                    <span *ngIf="hourly.wind_gust" class="gust-text">
+                      <br />
+                      <em
+                        >{{
+                          "Gust: " +
+                            (hourly.wind_gust * 3.6 | number: "1.0-1") +
+                            " km/h"
+                        }}
+                      </em>
+                    </span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Wind Direction"
+                    >explore</mat-icon
+                  >
+                  <div mat-line>
+                    <mat-icon
+                      [style]="
+                        'transform: rotate(' +
+                        hourly?.wind_deg +
+                        'deg); vertical-align: text-top'
+                      "
+                      >south</mat-icon
+                    >
+                    <!-- {{ hourly?.wind_deg }} &deg; &nbsp; -->
+                    {{ degreeToDirection(hourly?.wind_deg || 0) }}
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="UV Index"
+                    >new_releases</mat-icon
+                  >
+                  <div mat-line>
+                    {{ hourly?.uvi | number: "1.1-1" }} &nbsp;
+                    <span [style]="uvIndexLabelStyle(hourly?.uvi || 0)">
+                      {{ uvIndexLabel(hourly?.uvi || 0) }}
+                    </span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item class="double-height">
+                  <mat-icon mat-list-icon>schedule</mat-icon>
+                  <div mat-line>
+                    {{ hourly.dt * 1000 | date: "h a" }}
+                  </div>
+                  <div mat-line>
+                    <span class="small-text">
+                      {{ hourly.dt * 1000 | date: "MMM dd" }}
+                    </span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-header>
+          </mat-card>
+        </div>
       </div>
-      <div mat-subheader>Daily Forecast (Next 7 days)</div>
-      <div fxLayout="row" class="daily-container">
-        <mat-card *ngFor="let daily of weather.daily" class="daily">
-          <!-- {{ hourly | json }} -->
-          <mat-card-header class="less-margin">
-            <mat-list class="daily-list less-padding">
-              <mat-list-item style="height: 140px">
-                <figure>
-                  <img
-                    class="weather-avatar"
-                    [style.backgroundColor]="'burlywood'"
-                    [src]="
-                      daily.weather[0].icon
-                        ? 'https://openweathermap.org/img/wn/' +
-                          daily.weather[0]?.icon +
-                          '@4x.png'
-                        : 'assets/Exclamation_Circle_Red.svg'
-                    "
-                    [alt]="daily.weather[0].description"
-                  />
-                  <figcaption>
-                    {{ daily.weather[0].description | titlecase }}
-                  </figcaption>
-                </figure>
-              </mat-list-item>
+      <div *ngIf="weather.daily">
+        <mat-divider></mat-divider>
+        <div mat-subheader>Daily Forecast (Next 7 days)</div>
+        <div fxLayout="row" class="daily-container">
+          <mat-card *ngFor="let daily of weather.daily" class="daily">
+            <!-- {{ hourly | json }} -->
+            <mat-card-header class="less-margin">
+              <mat-list class="daily-list less-padding">
+                <mat-list-item style="height: 140px">
+                  <figure>
+                    <img
+                      class="weather-avatar"
+                      [style.backgroundColor]="'burlywood'"
+                      [src]="
+                        daily.weather[0].icon
+                          ? 'https://openweathermap.org/img/wn/' +
+                            daily.weather[0]?.icon +
+                            '@4x.png'
+                          : 'assets/Exclamation_Circle_Red.svg'
+                      "
+                      [alt]="daily.weather[0].description"
+                    />
+                    <figcaption>
+                      {{ daily.weather[0].description | titlecase }}
+                    </figcaption>
+                  </figure>
+                </mat-list-item>
 
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Day Temperature"
-                  >wb_sunny</mat-icon
-                >
-                <div mat-line>
-                  <span class="temperature-text">
-                    {{ daily.temp.day | number: "1.1-1" }} &#176;C
-                  </span>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Night Temperature"
-                  >nights_stay</mat-icon
-                >
-                <div mat-line>
-                  <span class="temperature-text">
-                    {{ daily.temp.night | number: "1.1-1" }} &#176;C
-                  </span>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon
-                  mat-list-icon
-                  matTooltip="Probability of Precipitation"
-                  >umbrella</mat-icon
-                >
-                <div mat-line>{{ daily.pop | percent }} pptn.</div>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-icon mat-list-icon matTooltip="Relative Humidity"
-                  >water_drop</mat-icon
-                >
-                <div mat-line>{{ weather?.humidity }}% RH</div>
-              </mat-list-item>
-              <!-- <mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Day Temperature"
+                    >wb_sunny</mat-icon
+                  >
+                  <div mat-line>
+                    <span class="temperature-text">
+                      {{ daily.temp.day | number: "1.1-1" }} &#176;C
+                    </span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Night Temperature"
+                    >nights_stay</mat-icon
+                  >
+                  <div mat-line>
+                    <span class="temperature-text">
+                      {{ daily.temp.night | number: "1.1-1" }} &#176;C
+                    </span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon
+                    mat-list-icon
+                    matTooltip="Probability of Precipitation"
+                    >umbrella</mat-icon
+                  >
+                  <div mat-line>{{ daily.pop | percent }} pptn.</div>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon mat-list-icon matTooltip="Relative Humidity"
+                    >water_drop</mat-icon
+                  >
+                  <div mat-line>{{ weather?.humidity }}% RH</div>
+                </mat-list-item>
+                <!-- <mat-list-item>
                 <mat-icon mat-list-icon>speed</mat-icon>
                 {{ daily?.pressure }} hPa
               </mat-list-item>
@@ -462,18 +492,19 @@
                   {{ uvIndexLabel(daily?.uvi || 0) }}
                 </span>
               </mat-list-item> -->
-              <mat-list-item>
-                <mat-icon mat-list-icon>today</mat-icon>
-                <div mat-line>
-                  {{ daily.dt * 1000 | date: "MMM d" }}
-                </div>
-              </mat-list-item>
-            </mat-list>
-          </mat-card-header>
-        </mat-card>
+                <mat-list-item>
+                  <mat-icon mat-list-icon>today</mat-icon>
+                  <div mat-line>
+                    {{ daily.dt * 1000 | date: "MMM d" }}
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-header>
+          </mat-card>
+        </div>
       </div>
-      <mat-divider></mat-divider>
       <div *ngIf="weather?.alerts">
+        <mat-divider></mat-divider>
         <div mat-subheader>Alerts</div>
         <mat-list-item>
           <mat-icon mat-list-icon>crisis_alert</mat-icon>

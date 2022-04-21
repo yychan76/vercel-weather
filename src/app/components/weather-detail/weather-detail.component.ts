@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _moment from 'moment';
 import { catchError, lastValueFrom, map, of, Subscription } from 'rxjs';
-import { Weather } from 'src/app/common/model';
+import { MinutelyForecast, Weather } from 'src/app/common/model';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
 
@@ -101,26 +101,48 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     return `${timeDiff} at ${timestampDate}`;
   }
 
-  getTimeOfDayColor(sunrise: number, sunset: number, utcOffsetSeconds: number, timestamp: number=0): string {
-    const timeFormat = "HH:mm:ss"
+  isDayTime(
+    sunrise: number,
+    sunset: number,
+    utcOffsetSeconds: number,
+    timestamp: number = 0
+  ): boolean {
+    const timeFormat = 'HH:mm:ss';
     const utcOffsetHours = utcOffsetSeconds / 3600;
     var momentObj;
     if (timestamp == 0) {
-      momentObj = moment(moment().utcOffset(utcOffsetHours).format(timeFormat), timeFormat);
+      momentObj = moment(
+        moment().utcOffset(utcOffsetHours).format(timeFormat),
+        timeFormat
+      );
     } else {
-      momentObj = moment(moment.unix(timestamp).utcOffset(utcOffsetHours).format(timeFormat), timeFormat);
+      momentObj = moment(
+        moment.unix(timestamp).utcOffset(utcOffsetHours).format(timeFormat),
+        timeFormat
+      );
     }
-    const sunriseMoment = moment(moment.unix(sunrise).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
-    const sunsetMoment = moment(moment.unix(sunset).utcOffset(utcOffsetHours).format(timeFormat), timeFormat)
-    // console.log("getTimeOfDayColor", momentObj);
-    // console.log("sunrise", sunriseMoment)
-    // console.log("sunset", sunsetMoment)
-    if (
-      momentObj.isBetween(
-        sunriseMoment,
-        sunsetMoment
-      )
-    ) {
+    const sunriseMoment = moment(
+      moment.unix(sunrise).utcOffset(utcOffsetHours).format(timeFormat),
+      timeFormat
+    );
+    const sunsetMoment = moment(
+      moment.unix(sunset).utcOffset(utcOffsetHours).format(timeFormat),
+      timeFormat
+    );
+    if (momentObj.isBetween(sunriseMoment, sunsetMoment)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getTimeOfDayColor(
+    sunrise: number,
+    sunset: number,
+    utcOffsetSeconds: number,
+    timestamp: number = 0
+  ): string {
+    if (this.isDayTime(sunrise, sunset, utcOffsetSeconds, timestamp)) {
       return 'burlywood';
     } else {
       return 'steelblue';
@@ -182,5 +204,17 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     } else {
       return 'color: #a061d1;font-weight: bold;';
     }
+  }
+
+  hasPrecipitation(minutelyForecast: MinutelyForecast[]) {
+    if (minutelyForecast == undefined) {
+      return false
+    }
+    for (let forecast of minutelyForecast) {
+      if (forecast.precipitation > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }

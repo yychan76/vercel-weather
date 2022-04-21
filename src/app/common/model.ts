@@ -57,6 +57,8 @@ export interface HourlyForecast {
   wind_deg: number;
   wind_gust: number;
   pop: number;
+  rain: HourPrecipitation;
+  snow: HourPrecipitation;
   weather: HourlyWeather[];
 }
 
@@ -86,12 +88,17 @@ export interface DailyForecast {
   clouds: number;
   pop: number;
   rain: number;
+  snow: number;
   uvi: number;
 }
 
 export interface MinutelyForecast {
   dt: number;
   precipitation: number;
+}
+
+export interface HourPrecipitation {
+  '1h': number;
 }
 export interface DailyTemperature {
   day: number;
