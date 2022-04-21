@@ -29,11 +29,16 @@ a {
 }
 
 .hourly-container,
-.daily-container {
+.daily-container,
+.minutely-container {
   width: auto;
   height: auto;
   overflow-x: scroll;
   overflow-y: hidden;
+}
+
+.minutely {
+  min-width: 110px;
 }
 
 .hourly {
@@ -42,6 +47,10 @@ a {
 
 .daily {
   min-width: 140px;
+}
+
+.mat-list.minutely-list .mat-list-item {
+  height: 34px; /* default is 72px */
 }
 
 .mat-list.hourly-list .mat-list-item {

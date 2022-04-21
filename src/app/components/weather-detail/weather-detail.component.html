@@ -136,6 +136,24 @@
             </span>
           </div>
         </mat-list-item>
+        <mat-list-item fxFlex *ngIf="weather?.rain">
+          <mat-icon mat-list-icon>cloudy_snowing</mat-icon>
+          <div mat-line>Rain</div>
+          <div mat-line>
+            <span class="current-data-text">
+              {{ weather?.rain | number: "1.0-1" }} mm/h
+            </span>
+          </div>
+        </mat-list-item>
+        <mat-list-item fxFlex *ngIf="weather?.snow">
+          <mat-icon mat-list-icon>ac_unit</mat-icon>
+          <div mat-line>Snow</div>
+          <div mat-line>
+            <span class="current-data-text">
+              {{ weather?.snow | number: "1.0-1" }} mm/h
+            </span>
+          </div>
+        </mat-list-item>
       </div>
       <mat-divider></mat-divider>
       <div mat-subheader>Wind</div>
@@ -220,6 +238,30 @@
         </mat-list-item>
       </div>
       <mat-divider></mat-divider>
+      <div mat-subheader>Minutely Forecast (Next 1 hr)</div>
+      <div fxLayout="row" class="minutely-container">
+        <mat-card *ngFor="let minutely of weather.minutely" class="minutely">
+          <!-- {{ minutely | json }} -->
+          <mat-card-header class="less-margin">
+            <mat-list class="minutely-list less-padding">
+              <mat-list-item>
+                <mat-icon mat-list-icon matTooltip="Precipitation"
+                  >{{weather?.snow ? 'ac_unit' : 'cloudy_snowing'}}</mat-icon
+                >
+                <div mat-line>
+                  {{ minutely.precipitation | number: "1.0-1" }} mm
+                </div>
+              </mat-list-item>
+              <mat-list-item class="double-height">
+                <mat-icon mat-list-icon>schedule</mat-icon>
+                <div mat-line>
+                  {{ minutely.dt * 1000 | date: "h:mm a" }}
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-header>
+        </mat-card>
+      </div>
       <div mat-subheader>Hourly Forecast (Next 48 hrs)</div>
       <div fxLayout="row" class="hourly-container">
         <mat-card *ngFor="let hourly of weather.hourly" class="hourly">
@@ -348,7 +390,7 @@
           </mat-card-header>
         </mat-card>
       </div>
-      <div mat-subheader>Daily Forecast</div>
+      <div mat-subheader>Daily Forecast (Next 7 days)</div>
       <div fxLayout="row" class="daily-container">
         <mat-card *ngFor="let daily of weather.daily" class="daily">
           <!-- {{ hourly | json }} -->

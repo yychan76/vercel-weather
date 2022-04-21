@@ -18,11 +18,14 @@ export interface Weather {
   wind_dir: number;
   wind_gust: number;
   uvi: number;
+  rain: number;
+  snow: number;
   sunrise: number;
   sunset: number;
   next_sunrises: number[];
   hourly: HourlyForecast[];
   daily: DailyForecast[];
+  minutely: MinutelyForecast[];
   alerts: Alert[];
   gif_title: string;
   gif_url: string;
@@ -86,6 +89,10 @@ export interface DailyForecast {
   uvi: number;
 }
 
+export interface MinutelyForecast {
+  dt: number;
+  precipitation: number;
+}
 export interface DailyTemperature {
   day: number;
   min: number;
