@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Weather } from '../model';
 
-const URL_API_BASE = '/api/weather/';
+const URL_API_BASE = '/api/weather/v2/';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,7 @@ export class WeatherService {
   constructor(private http: HttpClient) {}
 
   getWeather(city: string): Observable<Weather[]> {
+    console.info("getWeather: ", city);
     return this.http.get<any>(this.getUrl(city));
   }
 

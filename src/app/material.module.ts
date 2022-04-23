@@ -17,6 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const MATERIAL = [
   MatButtonModule,
@@ -37,6 +38,7 @@ const MATERIAL = [
   MatSlideToggleModule,
   MatExpansionModule,
   MatSliderModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

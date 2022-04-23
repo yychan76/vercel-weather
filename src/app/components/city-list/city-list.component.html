@@ -3,13 +3,38 @@
     <div fxLayout="row">
       <mat-form-field class="full-width" appearance="fill">
         <mat-label>City Name</mat-label>
-        <input matInput formControlName="city" placeholder="Ex. Singapore" />
+        <input
+          matInput
+          formControlName="city"
+          placeholder="Ex. Singapore"
+          [matAutocomplete]="auto"
+        />
         <mat-error *ngIf="form.controls['city'].hasError('required')"
           >City Name is <strong>required</strong>
         </mat-error>
         <mat-error *ngIf="form.controls['city'].hasError('minlength')"
           >City Name needs to be at least <strong>3 letters</strong>
         </mat-error>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let city of citySearchResults | async"
+            [value]="
+              city.name +
+              ', ' +
+              (city.state ? city.state + ', ' : '') +
+              city.country
+            "
+          >
+            <span>{{ city.name }}</span>
+            <span> {{ getFlagEmoji(city.country) }}</span>
+            <small *ngIf="city?.state"> {{ city.state }} </small>
+            <small
+              >{{
+                "(" + (city.lat | number) + ", " + (city.lon | number) + ")"
+              }}
+            </small>
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
       <button
         mat-raised-button
@@ -30,10 +55,12 @@
       [value]="city"
       [routerLink]="['/weather', city]"
     >
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      {{ city | titlecase }}
-      <button mat-icon-button color="warn" (click)="deleteCity(city)"><mat-icon>clear</mat-icon></button>
-    </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <span [innerHtml]="displayCity(city)"></span>
+        <button mat-icon-button color="warn" (click)="deleteCity(city)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
     </mat-list-option>
   </mat-selection-list>
 </mat-card>
