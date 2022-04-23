@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { debounceTime, EMPTY, Observable, Subscription } from 'rxjs';
 import { GeocodeCity } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
@@ -94,7 +94,7 @@ export class CityListComponent implements OnInit {
     return city;
   }
 
-  addCity() {
+  addCity(formDirective: FormGroupDirective) {
     // let city = this.form.value.city.trim().toLowerCase();
     let city = this.form.value.city.trim();
     console.log(city);
@@ -104,6 +104,7 @@ export class CityListComponent implements OnInit {
     }
     console.log(this.cities);
     this.form.reset();
+    formDirective.resetForm();
   }
 
   deleteCity(city: string): void {

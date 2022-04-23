@@ -1,5 +1,5 @@
 <mat-card class="city-list">
-  <form class="weather-form" [formGroup]="form">
+  <form class="weather-form" [formGroup]="form" #formDirective="ngForm">
     <div fxLayout="row">
       <mat-form-field class="full-width" appearance="fill">
         <mat-label>City Name</mat-label>
@@ -41,7 +41,7 @@
         color="primary"
         class="add-button"
         [disabled]="form.invalid"
-        (click)="addCity()"
+        (click)="addCity(formDirective)"
       >
         Add
       </button>
