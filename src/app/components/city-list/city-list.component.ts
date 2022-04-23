@@ -62,6 +62,23 @@ export class CityListComponent implements OnInit {
     return this.geocoderService.getCountryName(countryCode);
   }
 
+  getLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        let results = this.geocoderService.getCurrentLocationCities(lat, lon);
+        if (results) {
+          this.citySearchResults = results;
+        } else {
+          this.citySearchResults = EMPTY;
+        }
+      });
+    } else {
+      console.info('Geolocation not supported');
+    }
+  }
+
   loadCities() {
     let savedCities = localStorage.getItem('cities');
     if (savedCities) {

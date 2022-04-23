@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { GeocodeCity } from '../model';
 
 const URL_DIRECT_API_BASE = '/api/geo/direct/';
+const URL_REVERSE_API_BASE = '/api/geo/reverse/';
 
 const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
 const regionNamesInTraditionalChinese = new Intl.DisplayNames(['zh-Hant'], {
@@ -22,6 +23,18 @@ export class GeocoderService {
 
   getDirectUrl(city: string) {
     return `${URL_DIRECT_API_BASE}${city}`;
+  }
+
+  getCurrentLocationCities(
+    lat: number,
+    lon: number
+  ): Observable<GeocodeCity[]> {
+    console.info("Latitude: " + lat + " Longitude: " + lon);
+    return this.http.get<GeocodeCity[]>(this.getReverseUrl(lat, lon));
+  }
+
+  getReverseUrl(lat: number, lon: number) {
+    return `${URL_REVERSE_API_BASE}lat/${lat}/lon/${lon}`;
   }
 
   // https://dev.to/jorik/country-code-to-flag-emoji-a21

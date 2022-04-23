@@ -9,6 +9,14 @@
           placeholder="Ex. Singapore"
           [matAutocomplete]="auto"
         />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="My Location"
+          (click)="getLocation()"
+        >
+          <mat-icon>my_location</mat-icon>
+        </button>
         <mat-error *ngIf="form.controls['city'].hasError('required')"
           >City Name is <strong>required</strong>
         </mat-error>
