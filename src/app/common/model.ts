@@ -1,5 +1,6 @@
 export interface Weather {
   cityName: string;
+  stateName: string;
   lat: number;
   lon: number;
   timezone_offset: number;

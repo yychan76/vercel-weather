@@ -37,6 +37,11 @@
           </span>
         </div>
       </mat-card-title>
+      <mat-card-subtitle *ngIf="weather?.stateName">
+        <small>
+          <em>{{ weather?.stateName }}</em>
+        </small>
+      </mat-card-subtitle>
       <mat-card-subtitle>
         {{ weather?.main }}, {{ weather?.description }}
       </mat-card-subtitle>
