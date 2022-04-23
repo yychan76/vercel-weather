@@ -123,6 +123,14 @@ export interface DailyWeather {
   icon: string;
 }
 
+export interface GeocodeCity {
+  name: string;
+  lat: number;
+  lon: number;
+  country: string;
+  state: string;
+}
+
 export interface Giphy {
   title: string;
   imageUrl: string;

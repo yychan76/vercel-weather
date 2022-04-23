@@ -3,14 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _moment from 'moment';
 import { catchError, lastValueFrom, map, of, Subscription } from 'rxjs';
 import { MinutelyForecast, Weather } from 'src/app/common/model';
+import { GeocoderService } from 'src/app/common/services/geocoder.service';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
 
 const moment = _moment;
-const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
-const regionNamesInTraditionalChinese = new Intl.DisplayNames(['zh-Hant'], {
-  type: 'region',
-});
+
 
 @Component({
   selector: 'app-weather-detail',
@@ -25,6 +23,7 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private geocoderService: GeocoderService,
     private weatherService: WeatherService,
     private giphyService: GiphyService
   ) {}
@@ -82,17 +81,12 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
-  // https://dev.to/jorik/country-code-to-flag-emoji-a21
   getFlagEmoji(countryCode: string) {
-    const codePoints = countryCode
-      .toUpperCase()
-      .split('')
-      .map((char) => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
+    return this.geocoderService.getFlagEmoji(countryCode)
   }
 
   getCountryName(countryCode: string) {
-    return regionNamesInEnglish.of(countryCode);
+    return this.geocoderService.getCountryName(countryCode);
   }
 
   getCacheAge(timestamp: number) {
