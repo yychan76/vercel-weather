@@ -13,6 +13,71 @@ const GIPHY_RANDOM_RANGE = 200;
 // create an instance of Express
 const app = express();
 
+// Geocoding to find latitude and longitude from city name
+app.get("/api/geo/direct/:city(*)", (req, res) => {
+  const url = withQuery("http://api.openweathermap.org/geo/1.0/direct", {
+    q: req.params.city,
+    limit: 5,
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  fetch(url)
+    .then((result) => result.json())
+    .then((result) => {
+      console.info("Geocoding direct result: ", result);
+
+      res.status(200).type("application/json");
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error("openweather geocoding direct api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
+    });
+});
+
+// Geocoding to find latitude and longitude from zipcode,country code
+app.get("/api/geo/zip/:zipCountry", (req, res) => {
+  const url = withQuery("http://api.openweathermap.org/geo/1.0/zip", {
+    zip: req.params.zipCountry,
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  fetch(url)
+    .then((result) => result.json())
+    .then((result) => {
+      res.status(200).type("application/json");
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error("openweather geocoding zip api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
+    });
+});
+
+// Reverse Geocoding to find city name from latitude and longitude
+app.get("/api/geo/reverse/lat/:lat/lon/:lon", (req, res) => {
+  const url = withQuery("http://api.openweathermap.org/geo/1.0/reverse", {
+    lat: req.params.lat,
+    lon: req.params.lon,
+    limit: 5,
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  fetch(url)
+    .then((result) => result.json())
+    .then((result) => {
+      res.status(200).type("application/json");
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error("openweather geocoding reverse api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
+    });
+});
+
 app.get("/api/weather/:city", (req, res) => {
   const url = withQuery("https://api.openweathermap.org/data/2.5/weather", {
     q: req.params.city,
@@ -58,8 +123,8 @@ app.get("/api/weather/:city", (req, res) => {
             wind_dir: result.current.wind_deg,
             wind_gust: result.current.wind_gust,
             uvi: result.current.uvi,
-            rain: result.current.rain ? result.current.rain['1h'] : 0,
-            snow: result.current.snow ? result.current.snow['1h'] : 0,
+            rain: result.current.rain ? result.current.rain["1h"] : 0,
+            snow: result.current.snow ? result.current.snow["1h"] : 0,
             sunrise: result.current.sunrise,
             sunset: result.current.sunset,
             next_sunrises: [result.daily[0].sunrise, result.daily[1].sunrise],
@@ -87,6 +152,85 @@ app.get("/api/weather/:city", (req, res) => {
     });
 });
 
+// get the onecall weather for the city by first doing a geocode lookup
+// need to use (*) to match all characters as some locations use the hyphen
+// that clashes with default express.js hyphen handling for route param
+app.get("/api/weather/v2/:city(*)", (req, res) => {
+  let country;
+  let cityName;
+  let stateName;
+
+  getGeocodeLocationFromCity(req.params.city)
+    .then((result) => {
+      if (result) {
+        return result[0];
+      }
+    })
+    .then((result) => {
+      if (result) {
+        cityName = result.name;
+        country = result.country;
+        stateName = result.state;
+        return weatherOneCall(result.lat, result.lon);
+      } else {
+        throw new Error(JSON.stringify({message: "Location not found"}));
+      }
+    })
+    .then((result) => {
+      console.info("onecall current weather: ", result);
+      let cleanedResults = [];
+      try {
+        result.current.weather.forEach((weather) => {
+          cleanedResults.push({
+            cityName: cityName,
+            stateName: stateName,
+            lat: result.lat,
+            lon: result.lon,
+            timezone_offset: result.timezone_offset,
+            country: country,
+            main: weather.main,
+            description: weather.description,
+            icon: weather.icon,
+            temperature: result.current.temp,
+            feels_like: result.current.feels_like,
+            temp_min: result.daily[0].temp.min,
+            temp_max: result.daily[0].temp.max,
+            humidity: result.current.humidity,
+            pressure: result.current.pressure,
+            dew_point: result.current.dew_point,
+            wind_speed: result.current.wind_speed,
+            wind_dir: result.current.wind_deg,
+            wind_gust: result.current.wind_gust,
+            uvi: result.current.uvi,
+            rain: result.current.rain ? result.current.rain["1h"] : 0,
+            snow: result.current.snow ? result.current.snow["1h"] : 0,
+            sunrise: result.current.sunrise,
+            sunset: result.current.sunset,
+            next_sunrises: [result.daily[0].sunrise, result.daily[1].sunrise],
+            alerts: result.alerts,
+            hourly: result.hourly,
+            daily: result.daily,
+            minutely: result.minutely,
+            timestamp: result.current.dt,
+            query_timestamp: new Date().getTime(),
+          });
+        });
+      } catch (ex) {
+        console.error(ex);
+        throw new Error(JSON.stringify(result));
+      }
+
+      console.info("cleanedResults: ", cleanedResults);
+      res.status(200).type("application/json");
+      res.json(cleanedResults);
+    })
+    .catch((err) => {
+      console.error("openweather onecall api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
+    });
+});
+
 function weatherOneCall(lat, lon) {
   const url = withQuery("https://api.openweathermap.org/data/2.5/onecall", {
     lat: lat,
@@ -98,6 +242,25 @@ function weatherOneCall(lat, lon) {
   return fetch(url)
     .then((result) => result.json())
     .then((json) => {
+      return json;
+    })
+    .catch((err) => {
+      console.error(err);
+      return "";
+    });
+}
+
+function getGeocodeLocationFromCity(city) {
+  const url = withQuery("http://api.openweathermap.org/geo/1.0/direct", {
+    q: city,
+    limit: 5,
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  return fetch(url)
+    .then((result) => result.json())
+    .then((json) => {
+      console.info(json);
       return json;
     })
     .catch((err) => {
