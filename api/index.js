@@ -160,7 +160,7 @@ app.get("/api/weather/v2/:city(*)", (req, res) => {
   let cityName;
   let stateName;
 
-  getGeocodeLocationFromCity(req.params.city)
+  getGeocodeLocationFromString(req.params.city)
     .then((result) => {
       if (result) {
         return result[0];
@@ -173,7 +173,7 @@ app.get("/api/weather/v2/:city(*)", (req, res) => {
         stateName = result.state;
         return weatherOneCall(result.lat, result.lon);
       } else {
-        throw new Error(JSON.stringify({message: "Location not found"}));
+        throw new Error(JSON.stringify({ message: "Location not found" }));
       }
     })
     .then((result) => {
@@ -250,9 +250,49 @@ function weatherOneCall(lat, lon) {
     });
 }
 
+// determine which lookup to use
+function getGeocodeLocationFromString(string) {
+  // if the string only has the coordinates, use that
+  if (string.startsWith("_")) {
+    const [lat, lon] = string.substr(1).split(",");
+    return getGeocodeLocationFromLocation(lat, lon);
+  } else {
+    // if string includes the coordinates, prefer to search with that
+    if (string.includes("_")) {
+      const [lat, lon] = string.substr(string.indexOf("_") + 1).split(",");
+      return getGeocodeLocationFromLocation(lat, lon);
+    } else {
+      // otherwise search with just the name
+      return getGeocodeLocationFromCity(string);
+    }
+  }
+}
+
+// do a direct geocoder lookup to find matching cities
 function getGeocodeLocationFromCity(city) {
   const url = withQuery("http://api.openweathermap.org/geo/1.0/direct", {
     q: city,
+    limit: 5,
+    appid: OPENWEATHERMAP_KEY,
+  });
+  console.info(url);
+  return fetch(url)
+    .then((result) => result.json())
+    .then((json) => {
+      console.info(json);
+      return json;
+    })
+    .catch((err) => {
+      console.error(err);
+      return "";
+    });
+}
+
+// do a reverse geocoder lookup
+function getGeocodeLocationFromLocation(lat, lon) {
+  const url = withQuery("http://api.openweathermap.org/geo/1.0/reverse", {
+    lat: lat,
+    lon: lon,
     limit: 5,
     appid: OPENWEATHERMAP_KEY,
   });

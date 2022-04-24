@@ -21,6 +21,7 @@ import { environment } from '../environments/environment';
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
   { path: 'weather/:city', component: WeatherDetailComponent },
+  { path: 'weatherlocation/:city', component: WeatherDetailComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 

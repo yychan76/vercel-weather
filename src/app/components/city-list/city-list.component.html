@@ -12,8 +12,9 @@
         <button
           matSuffix
           mat-icon-button
+          matTooltip="Get My Location"
           aria-label="My Location"
-          (click)="getLocation()"
+          (click)="populateLocationCities()"
         >
           <mat-icon>my_location</mat-icon>
         </button>
@@ -30,7 +31,11 @@
               city.name +
               ', ' +
               (city.state ? city.state + ', ' : '') +
-              city.country
+              city.country +
+              '_' +
+              city.lat +
+              ',' +
+              city.lon
             "
           >
             <span>{{ city.name }}</span>
@@ -59,13 +64,22 @@
 <mat-card class="city-list">
   <mat-selection-list [multiple]="false">
     <mat-list-option
-      *ngFor="let city of cities"
+      *ngFor="let city of cities; let i = index"
       [value]="city"
-      [routerLink]="['/weather', city]"
+      [routerLink]="i == 0 ? ['/weatherlocation', ''] : ['/weather', city]"
+      (click)="i == 0 ? getLocation() : ''"
     >
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <span [innerHtml]="displayCity(city)"></span>
-        <button mat-icon-button color="warn" (click)="deleteCity(city)">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayoutAlign="center center">
+          <span> <mat-icon *ngIf="i == 0">my_location</mat-icon> &nbsp; </span>
+          <span [innerHtml]="displayCity(city)"></span>
+        </div>
+        <button
+          *ngIf="i != 0"
+          mat-icon-button
+          color="warn"
+          (click)="deleteCity(city)"
+        >
           <mat-icon>clear</mat-icon>
         </button>
       </div>

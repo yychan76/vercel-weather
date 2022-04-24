@@ -5,7 +5,8 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
-import { debounceTime, EMPTY, Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { debounceTime, EMPTY, Observable, of, Subscription } from 'rxjs';
 import { GeocodeCity } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
 
@@ -16,6 +17,7 @@ import { GeocoderService } from 'src/app/common/services/geocoder.service';
 })
 export class CityListComponent implements OnInit {
   cities: string[] = [
+    'My Location',
     'Singapore, SG',
     'Seoul, KR',
     'Kuala Lumpur, MY',
@@ -29,7 +31,8 @@ export class CityListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private geocoderService: GeocoderService
+    private geocoderService: GeocoderService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -67,12 +70,26 @@ export class CityListComponent implements OnInit {
     return this.geocoderService.getCountryName(countryCode);
   }
 
-  getLocation(): void {
+  getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        let results = this.geocoderService.getCurrentLocationCities(lat, lon);
+        this.router.navigate(['/weatherlocation', '_' + lat + ',' + lon]);
+      });
+    } else {
+      console.info('Geolocation not supported');
+    }
+    return 'my_location';
+  }
+
+  populateLocationCities(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        var results;
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        results = this.geocoderService.getCurrentLocationCities(lat, lon);
         if (results) {
           this.citySearchResults = results;
         } else {
@@ -96,22 +113,34 @@ export class CityListComponent implements OnInit {
   }
 
   displayCity(city: string) {
-    let tokens = city.split(',').map((c: string) => c.trim());
-    if (tokens.length > 1) {
-      if (tokens[tokens.length - 1].length == 2) {
-        let countryCode = tokens.pop() || '';
+    let lat, lon;
+    let geoTokens = city.split('_');
+    if (geoTokens.length == 2) {
+      [lat, lon] = geoTokens[1].split(',').map((val) => parseFloat(val));
+    }
+    let nameTokens = geoTokens[0].split(',').map((c: string) => c.trim());
+    if (nameTokens.length > 1) {
+      if (nameTokens[nameTokens.length - 1].length == 2) {
+        let countryCode = nameTokens.pop() || '';
         let state =
-          tokens.length == 2
-            ? ' <small><em>' + tokens.pop() + '</em></small>'
+          nameTokens.length == 2
+            ? ' <small><em>' + nameTokens.pop() + '</em></small>'
             : '';
         return (
-          tokens[0] +
+          nameTokens[0] +
           state +
           ' <strong>' +
           countryCode +
           '</strong> <span class="flag">' +
           this.geocoderService.getFlagEmoji(countryCode) +
-          ' </span>'
+          ' </span>' +
+          (lat && lon
+            ? '<span class="coordinates">(' +
+              lat.toFixed(3) +
+              ', ' +
+              lon.toFixed(3) +
+              ')</span>'
+            : '')
         );
       }
     }

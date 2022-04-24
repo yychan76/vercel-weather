@@ -132,6 +132,11 @@ export interface GeocodeCity {
   state: string;
 }
 
+export interface Coordinates {
+  lat: number;
+  lon: number;
+}
+
 export interface Giphy {
   title: string;
   imageUrl: string;

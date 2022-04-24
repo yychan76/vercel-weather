@@ -15,3 +15,9 @@
   font-size: 34px;
   vertical-align: middle;
 }
+
+:host ::ng-deep .mat-list-base .mat-list-option .mat-list-text .coordinates {
+  font-size: 12px;
+  vertical-align: middle;
+  color: cadetblue;
+}

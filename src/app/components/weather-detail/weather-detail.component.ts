@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _moment from 'moment';
 import { catchError, lastValueFrom, map, of, Subscription } from 'rxjs';
-import { MinutelyForecast, Weather } from 'src/app/common/model';
+import { Coordinates, MinutelyForecast, Weather } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
 
 const moment = _moment;
-
 
 @Component({
   selector: 'app-weather-detail',
@@ -17,6 +16,7 @@ const moment = _moment;
 })
 export class WeatherDetailComponent implements OnInit, OnDestroy {
   city!: string;
+  coordinates!: Coordinates;
   weatherList!: Weather[];
   sub$!: Subscription;
 
@@ -37,44 +37,47 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   }
 
   populateWeather() {
-    this.city = this.activatedRoute.snapshot.params['city'];
-    this.sub$ = this.weatherService
-      .getWeather(this.city)
-      .pipe(
-        catchError((err) => {
-          console.error('observable error: ', err);
-          return of([err.error]);
-        }),
-        map((weathers) => {
-          // the array of weather results from openweathermap
-          // console.info('weathers: ', weathers);
-          weathers.forEach((weather) => {
-            // go through each member of the array and look for a giphy image
-            // console.info('weather: ', weather);
-            let giphy_search_term = '';
-            if (weather.cod == '404') {
-              giphy_search_term = '404 not found';
-            } else {
-              giphy_search_term =
-                'weather ' + weather.main + ' ' + weather.description;
-            }
-            lastValueFrom(this.giphyService.search(giphy_search_term)).then(
-              (result) => {
-                // apply the giphy image result to the weather object
-                // console.info('giphy: ', result);
-                weather.gif_title = result[0].title;
-                weather.gif_url = result[0].imageUrl;
+    // this.city = this.activatedRoute.snapshot.params['city'];
+    this.activatedRoute.paramMap.subscribe((params) => {
+      this.city = params.get('city') || '';
+      this.sub$ = this.weatherService
+        .getWeather(this.city)
+        .pipe(
+          catchError((err) => {
+            console.error('observable error: ', err);
+            return of([err.error]);
+          }),
+          map((weathers) => {
+            // the array of weather results from openweathermap
+            // console.info('weathers: ', weathers);
+            weathers.forEach((weather) => {
+              // go through each member of the array and look for a giphy image
+              // console.info('weather: ', weather);
+              let giphy_search_term = '';
+              if (weather.cod == '404') {
+                giphy_search_term = '404 not found';
+              } else {
+                giphy_search_term =
+                  'weather ' + weather.main + ' ' + weather.description;
               }
-            );
-          });
-          // make sure to return the result for the map as not using implicit return
-          return weathers;
-        })
-      )
-      .subscribe((result) => {
-        console.info('subscribe: ', result);
-        this.weatherList = result;
-      });
+              lastValueFrom(this.giphyService.search(giphy_search_term)).then(
+                (result) => {
+                  // apply the giphy image result to the weather object
+                  // console.info('giphy: ', result);
+                  weather.gif_title = result[0].title;
+                  weather.gif_url = result[0].imageUrl;
+                }
+              );
+            });
+            // make sure to return the result for the map as not using implicit return
+            return weathers;
+          })
+        )
+        .subscribe((result) => {
+          console.info('subscribe: ', result);
+          this.weatherList = result;
+        });
+    });
   }
 
   goBack() {
@@ -82,7 +85,7 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   }
 
   getFlagEmoji(countryCode: string) {
-    return this.geocoderService.getFlagEmoji(countryCode)
+    return this.geocoderService.getFlagEmoji(countryCode);
   }
 
   getCountryName(countryCode: string) {
@@ -202,7 +205,7 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
 
   hasPrecipitation(minutelyForecast: MinutelyForecast[]) {
     if (minutelyForecast == undefined) {
-      return false
+      return false;
     }
     for (let forecast of minutelyForecast) {
       if (forecast.precipitation > 0) {
