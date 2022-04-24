@@ -10,3 +10,8 @@
   max-width: 800px;
   margin: auto;
 }
+
+:host ::ng-deep .mat-list-base .mat-list-option .mat-list-text .flag {
+  font-size: 34px;
+  vertical-align: middle;
+}

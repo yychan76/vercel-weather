@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 import { debounceTime, EMPTY, Observable, Subscription } from 'rxjs';
 import { GeocodeCity } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
@@ -102,8 +107,11 @@ export class CityListComponent implements OnInit {
         return (
           tokens[0] +
           state +
-          ' ' +
-          this.geocoderService.getFlagEmoji(countryCode)
+          ' <strong>' +
+          countryCode +
+          '</strong> <span class="flag">' +
+          this.geocoderService.getFlagEmoji(countryCode) +
+          ' </span>'
         );
       }
     }
