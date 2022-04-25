@@ -162,9 +162,8 @@ app.get("/api/weather/v2/:city(*)", (req, res) => {
 
   getGeocodeLocationFromString(req.params.city)
     .then((result) => {
-      if (result) {
-        return result[0];
-      }
+      console.info("result from getGeocodeLocationFromString:", result);
+      return result[0];
     })
     .then((result) => {
       if (result) {
@@ -256,22 +255,58 @@ function getGeocodeLocationFromString(string) {
   if (string.startsWith("_")) {
     const [lat, lon] = string.substr(1).split(",");
     return getGeocodeLocationFromLocation(lat, lon);
+  } else if (string.includes("_")) {
+    // if string includes the coordinates,
+
+    const [lat, lon] = string.substr(string.indexOf("_") + 1).split(",");
+    let city = string.split("_")[0] || "";
+    let result = getGeocodeLocationFromCity(city);
+
+    // console.info("getGeocodeLocationFromCity:", result);
+
+    console.info("lat: " + lat + ", lon: " + lon);
+    return result
+      .then((resolved) => {
+        // console.info("resolved promise: ", resolved);
+        // filter to the result that matches the coordinates
+        let filtered = resolved.filter((item) => {
+          return floatsEqual(item.lat, lat) && floatsEqual(item.lon, lon);
+        });
+        console.info(`filtered promise ${filtered.length}: ${filtered}`);
+        return filtered;
+      })
+      .then((filtered) => {
+        if (Array.isArray(filtered) && filtered.length) {
+          console.info(
+            `Filtered contains ${
+              filtered.length
+            } item. Returning: ${JSON.stringify(filtered)}`
+          );
+          return filtered;
+        } else {
+          console.error(
+            "Filtered has no items. Using location geocode instead"
+          );
+          // fallback to search with coordinates if no results from city name search
+          return getGeocodeLocationFromLocation(lat, lon);
+        }
+      });
   } else {
-    // if string includes the coordinates, prefer to search with that
-    if (string.includes("_")) {
-      const [lat, lon] = string.substr(string.indexOf("_") + 1).split(",");
-      return getGeocodeLocationFromLocation(lat, lon);
-    } else {
-      // otherwise search with just the name
-      return getGeocodeLocationFromCity(string);
-    }
+    // otherwise search with just the name
+    return getGeocodeLocationFromCity(string);
   }
+}
+
+// returns true if the two floats x, y are equal within tolerance epsilon
+function floatsEqual(x, y, epsilon = 1e-9) {
+  return Math.abs(parseFloat(x) - parseFloat(y)) < epsilon;
 }
 
 // do a direct geocoder lookup to find matching cities
 function getGeocodeLocationFromCity(city) {
+  console.info("getGeocodeLocationFromCity: ", city);
   const url = withQuery("http://api.openweathermap.org/geo/1.0/direct", {
-    q: city,
+    q: decodeURI(city),
     limit: 5,
     appid: OPENWEATHERMAP_KEY,
   });
@@ -279,11 +314,11 @@ function getGeocodeLocationFromCity(city) {
   return fetch(url)
     .then((result) => result.json())
     .then((json) => {
-      console.info(json);
+      console.info("getGeocodeLocationFromCity result: ", json);
       return json;
     })
     .catch((err) => {
-      console.error(err);
+      console.error("getGeocodeLocationFromCity error: ".err);
       return "";
     });
 }
@@ -300,11 +335,14 @@ function getGeocodeLocationFromLocation(lat, lon) {
   return fetch(url)
     .then((result) => result.json())
     .then((json) => {
-      console.info(json);
+      console.info(
+        `getGeocodeLocationFromLocation result for (${lat}, ${lon}): `,
+        json
+      );
       return json;
     })
     .catch((err) => {
-      console.error(err);
+      console.error("getGeocodeLocationFromLocation error: ", err);
       return "";
     });
 }
