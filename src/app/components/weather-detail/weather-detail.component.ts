@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { icon, Icon, latLng, marker, tileLayer } from 'leaflet';
 import * as _moment from 'moment';
 import { catchError, lastValueFrom, map, of, Subscription } from 'rxjs';
 import { Coordinates, MinutelyForecast, Weather } from 'src/app/common/model';
@@ -19,6 +20,8 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   coordinates!: Coordinates;
   weatherList!: Weather[];
   sub$!: Subscription;
+  mapOptions: any;
+  mapLayers: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -76,8 +79,36 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
         .subscribe((result) => {
           console.info('subscribe: ', result);
           this.weatherList = result;
+          // initialise the map
+          this.initMap(result[0].lat, result[0].lon);
         });
     });
+  }
+
+  initMap(lat: number, lon: number): void {
+    this.mapOptions = {
+      layers: [
+        tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution:
+            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.',
+        }),
+      ],
+      zoom: 12,
+      center: latLng(lat, lon),
+    };
+
+    this.mapLayers = [
+      // circle([lat, lon], { radius: 5000 }),
+      marker([lat, lon], {
+        icon: icon({
+          ...Icon.Default.prototype.options,
+          iconUrl: 'assets/marker-icon.png',
+          iconRetinaUrl: 'assets/marker-icon-2x.png',
+          shadowUrl: 'assets/marker-shadow.png',
+        }),
+      }),
+    ];
   }
 
   goBack() {

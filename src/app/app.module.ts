@@ -17,6 +17,7 @@ import { LoggerService } from './common/services/logger.service';
 import { RemainingSunTimeComponent } from './components/remaining-sun-time/remaining-sun-time.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 const appRoutes: Routes = [
   { path: '', component: CityListComponent },
@@ -48,6 +49,7 @@ const extraOptions: ExtraOptions = {
     FlexLayoutModule,
     HttpClientModule,
     FontAwesomeModule,
+    LeafletModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

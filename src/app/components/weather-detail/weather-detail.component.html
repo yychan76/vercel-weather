@@ -72,6 +72,12 @@
       alt="Powered by Giphy"
     />
   </div>
+  <div
+    style="height: 300px"
+    leaflet
+    [leafletOptions]="mapOptions"
+    [leafletLayers]="mapLayers"
+  ></div>
   <mat-card-content>
     <mat-list *ngIf="weather.temperature">
       <div mat-subheader>Temperatures</div>
