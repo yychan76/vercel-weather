@@ -251,37 +251,35 @@ function weatherOneCall(lat, lon) {
 
 // determine which lookup to use
 function getGeocodeLocationFromString(string) {
-  // if the string only has the coordinates, use that
+  // if the string only has the coordinates, use that to lookup
   if (string.startsWith("_")) {
     const [lat, lon] = string.substr(1).split(",");
     return getGeocodeLocationFromLocation(lat, lon);
   } else if (string.includes("_")) {
-    // if string includes the coordinates,
-
+    // if string includes the coordinates, first search using the city name,
+    // because the OpenWeatherMap Geolocation API is not very good at returning
+    // the same city result for the same lat,lon coordinates
     const [lat, lon] = string.substr(string.indexOf("_") + 1).split(",");
     let city = string.split("_")[0] || "";
     let result = getGeocodeLocationFromCity(city);
-
-    // console.info("getGeocodeLocationFromCity:", result);
 
     console.info("lat: " + lat + ", lon: " + lon);
     return result
       .then((resolved) => {
         // console.info("resolved promise: ", resolved);
         // filter to the result that matches the coordinates
-        let filtered = resolved.filter((item) => {
+        return resolved.filter((item) => {
           return floatsEqual(item.lat, lat) && floatsEqual(item.lon, lon);
         });
-        console.info(`filtered promise ${filtered.length}: ${filtered}`);
-        return filtered;
       })
       .then((filtered) => {
         if (Array.isArray(filtered) && filtered.length) {
           console.info(
-            `Filtered contains ${
-              filtered.length
-            } item. Returning: ${JSON.stringify(filtered)}`
+            `Filtered contains ${filtered.length} item. Returning: `
           );
+          // output the list of object properties
+          console.dir(filtered);
+          // return the filtered geocode object (Promise)
           return filtered;
         } else {
           console.error(
