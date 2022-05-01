@@ -7,6 +7,7 @@ import { Coordinates, MinutelyForecast, Weather } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
+import { environment } from 'src/environments/environment'
 
 const moment = _moment;
 
@@ -22,6 +23,8 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
   sub$!: Subscription;
   mapOptions: any;
   mapLayers: any;
+  mapLayersControl: any;
+  appid = environment.openweathermapKey;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -109,6 +112,47 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
         }),
       }),
     ];
+
+    this.mapLayersControl = {
+      overlays: {
+        Temperature: tileLayer(
+          `http://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+          {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://owm.io">VANE</a>',
+            id: 'temp',
+          }
+        ),
+        Clouds: tileLayer(
+          `http://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+          {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://owm.io">VANE</a>',
+          }
+        ),
+        Precipitation: tileLayer(
+          `http://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+          {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://owm.io">VANE</a>',
+          }
+        ),
+        Wind: tileLayer(
+          `http://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+          {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://owm.io">VANE</a>',
+          }
+        ),
+        Pressure: tileLayer(
+          `http://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+          {
+            maxZoom: 18,
+            attribution: '&copy; <a href="http://owm.io">VANE</a>',
+          }
+        ),
+      },
+    };
   }
 
   goBack() {
