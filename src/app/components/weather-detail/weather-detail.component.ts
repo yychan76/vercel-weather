@@ -7,7 +7,7 @@ import { Coordinates, MinutelyForecast, Weather } from 'src/app/common/model';
 import { GeocoderService } from 'src/app/common/services/geocoder.service';
 import { GiphyService } from 'src/app/common/services/giphy.service';
 import { WeatherService } from 'src/app/common/services/weather.service';
-import { environment } from 'src/environments/environment'
+import { environment } from 'src/environments/environment';
 
 const moment = _moment;
 
@@ -101,6 +101,25 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
       center: latLng(lat, lon),
     };
 
+    // define this here and add to the mapLayers so that it will be selected by default
+    var precipitationLayer = tileLayer(
+      `http://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+      {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://owm.io">VANE</a>',
+        id: 'precipitation',
+      }
+    );
+
+    var cloudsLayer = tileLayer(
+      `http://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${this.appid}`,
+      {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://owm.io">VANE</a>',
+        id: 'clouds',
+      }
+    );
+
     this.mapLayers = [
       // circle([lat, lon], { radius: 5000 }),
       marker([lat, lon], {
@@ -111,6 +130,9 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
           shadowUrl: 'assets/marker-shadow.png',
         }),
       }),
+      // here it will be selected and displayed by default
+      precipitationLayer,
+      cloudsLayer,
     ];
 
     this.mapLayersControl = {
@@ -123,25 +145,15 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
             id: 'temp',
           }
         ),
-        Clouds: tileLayer(
-          `http://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${this.appid}`,
-          {
-            maxZoom: 18,
-            attribution: '&copy; <a href="http://owm.io">VANE</a>',
-          }
-        ),
-        Precipitation: tileLayer(
-          `http://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${this.appid}`,
-          {
-            maxZoom: 18,
-            attribution: '&copy; <a href="http://owm.io">VANE</a>',
-          }
-        ),
+        // shows the control for the layer
+        Clouds: cloudsLayer,
+        Precipitation: precipitationLayer,
         Wind: tileLayer(
           `http://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${this.appid}`,
           {
             maxZoom: 18,
             attribution: '&copy; <a href="http://owm.io">VANE</a>',
+            id: 'wind',
           }
         ),
         Pressure: tileLayer(
@@ -149,6 +161,7 @@ export class WeatherDetailComponent implements OnInit, OnDestroy {
           {
             maxZoom: 18,
             attribution: '&copy; <a href="http://owm.io">VANE</a>',
+            id: 'pressure',
           }
         ),
       },
