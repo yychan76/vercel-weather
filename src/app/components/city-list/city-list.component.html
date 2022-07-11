@@ -38,6 +38,29 @@
                 "(" + (city.lat | number) + ", " + (city.lon | number) + ")"
               }}
             </small>
+            <!-- {{this.searchOption.value}} -->
+            <span
+              *ngIf="
+                weatherCache[this.searchOption.value] | async as searchData
+              "
+            >
+              <span *ngIf="searchData.icon">
+                <img
+                  class="forecast"
+                  [src]="
+                    searchData.icon
+                      ? 'https://openweathermap.org/img/wn/' +
+                        searchData?.icon +
+                        '@2x.png'
+                      : 'assets/Exclamation_Circle_Red.svg'
+                  "
+                  [alt]="searchData.description"
+                />
+                <span class="medium-text">
+                  {{ searchData.temperature | number: "1.0-0" }} &#176;C
+                </span>
+              </span>
+            </span>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -64,6 +87,27 @@
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div fxLayoutAlign="center center">
           <span> <mat-icon *ngIf="i == 0">my_location</mat-icon> &nbsp; </span>
+          <span *ngIf="weatherCache[city] | async as data">
+            <div *ngIf="data.icon">
+              <div fxLayoutAlign="center center">
+                <img
+                  class="forecast"
+                  [src]="
+                    data.icon
+                      ? 'https://openweathermap.org/img/wn/' +
+                        data?.icon +
+                        '@2x.png'
+                      : 'assets/Exclamation_Circle_Red.svg'
+                  "
+                  [alt]="data.description"
+                />
+                <span class="medium-text">
+                  {{ data.temperature | number: "1.0-0" }} &#176;C &nbsp; &nbsp;
+                  &nbsp;
+                </span>
+              </div>
+            </div>
+          </span>
           <span [innerHtml]="displayCity(city)"></span>
         </div>
         <button
