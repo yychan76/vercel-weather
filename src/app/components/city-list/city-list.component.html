@@ -31,49 +31,52 @@
             #searchOption
           >
             <div fxLayout="row">
-              <div fxLayout="column" fxLayoutAlign="start start">
+              <div fxLayout="column" fxLayoutAlign="center start">
                 <span>
                   <span>{{ city.name }}</span>
                   <span> {{ getFlagEmoji(city.country) }}</span>
+                  <span>
+                    <small class="coordinates">
+                      {{
+                        "(" +
+                          (city.lat | number) +
+                          ", " +
+                          (city.lon | number) +
+                          ")"
+                      }}
+                    </small>
+                  </span>
                 </span>
                 <span>
                   <small *ngIf="city?.state"
                     ><em> {{ city.state }} </em></small
                   >
-                  <small class="coordinates"
-                    >{{
-                      "(" +
-                        (city.lat | number) +
-                        ", " +
-                        (city.lon | number) +
-                        ")"
-                    }}
-                  </small>
-                </span>
-              </div>
-              <!-- weather icon -->
-              <span
-                *ngIf="
-                  weatherCache[this.searchOption.value] | async as searchData
-                "
-              >
-                <span *ngIf="searchData.icon">
-                  <img
-                    class="forecast"
-                    [src]="
-                      searchData.icon
-                        ? 'https://openweathermap.org/img/wn/' +
-                          searchData?.icon +
-                          '@2x.png'
-                        : 'assets/Exclamation_Circle_Red.svg'
+                  <!-- weather icon -->
+                  <span
+                    *ngIf="
+                      weatherCache[this.searchOption.value]
+                        | async as searchData
                     "
-                    [alt]="searchData.description"
-                  />
-                  <span class="medium-text">
-                    {{ searchData.temperature | number: "1.0-0" }} &#176;C
+                  >
+                    <span *ngIf="searchData.icon">
+                      <img
+                        class="forecast"
+                        [src]="
+                          searchData.icon
+                            ? 'https://openweathermap.org/img/wn/' +
+                              searchData?.icon +
+                              '@2x.png'
+                            : 'assets/Exclamation_Circle_Red.svg'
+                        "
+                        [alt]="searchData.description"
+                      />
+                      <span class="medium-text">
+                        {{ searchData.temperature | number: "1.0-0" }} &#176;C
+                      </span>
+                    </span>
                   </span>
                 </span>
-              </span>
+              </div>
             </div>
           </mat-option>
         </mat-autocomplete>
