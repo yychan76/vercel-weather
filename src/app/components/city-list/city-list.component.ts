@@ -59,6 +59,19 @@ export class CityListComponent implements OnInit {
         } else {
           this.citySearchResults = EMPTY;
         }
+
+  getCityStrWithGeoCode(city: GeocodeCity): string {
+    return (
+      city.name +
+      ',' +
+      (city.state ? city.state + ',' : '') +
+      city.country +
+      '_' +
+      city.lat +
+      ',' +
+      city.lon
+    );
+  }
       });
   }
 

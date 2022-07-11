@@ -27,16 +27,8 @@
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option
             *ngFor="let city of citySearchResults | async"
-            [value]="
-              city.name +
-              ', ' +
-              (city.state ? city.state + ', ' : '') +
-              city.country +
-              '_' +
-              city.lat +
-              ',' +
-              city.lon
-            "
+            [value]="getCityStrWithGeoCode(city)"
+            #searchOption
           >
             <span>{{ city.name }}</span>
             <span> {{ getFlagEmoji(city.country) }}</span>
