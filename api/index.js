@@ -158,10 +158,11 @@ app.get("/api/weather/v2/:city(*)", (req, res) => {
     });
 });
 
-function weatherOneCall(lat, lon) {
+function weatherOneCall(lat, lon, glance) {
   const url = withQuery("https://api.openweathermap.org/data/2.5/onecall", {
     lat: lat,
     lon: lon,
+    exclude: glance ? "minutely,hourly,daily,alerts" : "",
     units: "metric",
     appid: OPENWEATHERMAP_KEY,
   });
@@ -176,6 +177,80 @@ function weatherOneCall(lat, lon) {
       return "";
     });
 }
+
+// reduced data version for getting basic weather data for lists
+// get the onecall weather for the city by first doing a geocode lookup
+// need to use (*) to match all characters as some locations use the hyphen
+// that clashes with default express.js hyphen handling for route param
+app.get("/api/weatherglance/:city(*)", (req, res) => {
+  let country;
+  let cityName;
+  let stateName;
+
+  getGeocodeLocationFromString(req.params.city)
+    .then((result) => {
+      // console.info("result from getGeocodeLocationFromString:", result);
+      return result[0];
+    })
+    .then((result) => {
+      if (result) {
+        cityName = result.name;
+        country = result.country;
+        stateName = result.state;
+        return weatherOneCall(result.lat, result.lon, true);
+      } else {
+        throw new Error(JSON.stringify({ message: "Location not found" }));
+      }
+    })
+    .then((result) => {
+      console.info("weatherGlance_onecall current weather: ", result);
+      let cleanedResults = [];
+      try {
+        result.current.weather.forEach((weather) => {
+          cleanedResults.push({
+            cityName: cityName,
+            stateName: stateName,
+            lat: result.lat,
+            lon: result.lon,
+            timezone_offset: result.timezone_offset,
+            country: country,
+            main: weather.main,
+            description: weather.description,
+            icon: weather.icon,
+            temperature: result.current.temp,
+            feels_like: result.current.feels_like,
+            // temp_min: result.daily[0].temp.min,
+            // temp_max: result.daily[0].temp.max,
+            humidity: result.current.humidity,
+            pressure: result.current.pressure,
+            dew_point: result.current.dew_point,
+            wind_speed: result.current.wind_speed,
+            wind_dir: result.current.wind_deg,
+            wind_gust: result.current.wind_gust,
+            uvi: result.current.uvi,
+            rain: result.current.rain ? result.current.rain["1h"] : 0,
+            snow: result.current.snow ? result.current.snow["1h"] : 0,
+            sunrise: result.current.sunrise,
+            sunset: result.current.sunset,
+            timestamp: result.current.dt,
+            query_timestamp: new Date().getTime(),
+          });
+        });
+      } catch (ex) {
+        console.error(ex);
+        throw new Error(JSON.stringify(result));
+      }
+
+      console.info("weatherGlance_cleanedResults: ", cleanedResults);
+      res.status(200).type("application/json");
+      res.json(cleanedResults);
+    })
+    .catch((err) => {
+      console.error("openweather glance onecall api return error:", err);
+      res.status(400).type("application/json");
+      res.json(JSON.parse(err.message));
+    });
+});
 
 // determine which lookup to use
 function getGeocodeLocationFromString(string) {
@@ -206,7 +281,7 @@ function getGeocodeLocationFromString(string) {
             `Filtered contains ${filtered.length} item. Returning: `
           );
           // output the list of object properties
-          console.dir(filtered);
+          // console.dir(filtered);
           // return the filtered geocode object (Promise)
           return filtered;
         } else {
@@ -240,7 +315,7 @@ function getGeocodeLocationFromCity(city) {
   return fetch(url)
     .then((result) => result.json())
     .then((json) => {
-      console.info("getGeocodeLocationFromCity result: ", json);
+      // console.info("getGeocodeLocationFromCity result: ", json);
       return json;
     })
     .catch((err) => {
@@ -261,10 +336,10 @@ function getGeocodeLocationFromLocation(lat, lon) {
   return fetch(url)
     .then((result) => result.json())
     .then((json) => {
-      console.info(
-        `getGeocodeLocationFromLocation result for (${lat}, ${lon}): `,
-        json
-      );
+      // console.info(
+      //   `getGeocodeLocationFromLocation result for (${lat}, ${lon}): `,
+      //   json
+      // );
       return json;
     })
     .catch((err) => {
