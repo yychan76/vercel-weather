@@ -30,37 +30,51 @@
             [value]="getCityStrWithGeoCode(city)"
             #searchOption
           >
-            <span>{{ city.name }}</span>
-            <span> {{ getFlagEmoji(city.country) }}</span>
-            <small *ngIf="city?.state"> {{ city.state }} </small>
-            <small
-              >{{
-                "(" + (city.lat | number) + ", " + (city.lon | number) + ")"
-              }}
-            </small>
-            <!-- {{this.searchOption.value}} -->
-            <span
-              *ngIf="
-                weatherCache[this.searchOption.value] | async as searchData
-              "
-            >
-              <span *ngIf="searchData.icon">
-                <img
-                  class="forecast"
-                  [src]="
-                    searchData.icon
-                      ? 'https://openweathermap.org/img/wn/' +
-                        searchData?.icon +
-                        '@2x.png'
-                      : 'assets/Exclamation_Circle_Red.svg'
-                  "
-                  [alt]="searchData.description"
-                />
-                <span class="medium-text">
-                  {{ searchData.temperature | number: "1.0-0" }} &#176;C
+            <div fxLayout="row">
+              <div fxLayout="column" fxLayoutAlign="start start">
+                <span>
+                  <span>{{ city.name }}</span>
+                  <span> {{ getFlagEmoji(city.country) }}</span>
+                </span>
+                <span>
+                  <small *ngIf="city?.state"
+                    ><em> {{ city.state }} </em></small
+                  >
+                  <small class="coordinates"
+                    >{{
+                      "(" +
+                        (city.lat | number) +
+                        ", " +
+                        (city.lon | number) +
+                        ")"
+                    }}
+                  </small>
+                </span>
+              </div>
+              <!-- weather icon -->
+              <span
+                *ngIf="
+                  weatherCache[this.searchOption.value] | async as searchData
+                "
+              >
+                <span *ngIf="searchData.icon">
+                  <img
+                    class="forecast"
+                    [src]="
+                      searchData.icon
+                        ? 'https://openweathermap.org/img/wn/' +
+                          searchData?.icon +
+                          '@2x.png'
+                        : 'assets/Exclamation_Circle_Red.svg'
+                    "
+                    [alt]="searchData.description"
+                  />
+                  <span class="medium-text">
+                    {{ searchData.temperature | number: "1.0-0" }} &#176;C
+                  </span>
                 </span>
               </span>
-            </span>
+            </div>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

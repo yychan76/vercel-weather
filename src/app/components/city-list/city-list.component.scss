@@ -22,6 +22,10 @@
   color: cadetblue;
 }
 
+.coordinates {
+  color: cadetblue;
+}
+
 .medium-text {
   font-size: 12px;
 }
@@ -30,4 +34,10 @@
   border-radius: 50%;
   vertical-align: middle;
   max-width: 48px;
+}
+
+.mat-option {
+  height: unset;
+  white-space: normal;
+  line-height: normal;
 }
