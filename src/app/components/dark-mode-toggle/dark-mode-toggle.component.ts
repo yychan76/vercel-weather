@@ -15,27 +15,20 @@ export class DarkModeToggleComponent implements OnInit, OnDestroy {
   darkToggleControl = new FormControl('');
 
   ngOnInit(): void {
-    // this.setDarkMode();
-  }
-
-  ngOnDestroy(): void {
-    this.sub$?.unsubscribe();
-  }
-
-  setDarkMode() {
     // Initially check if dark mode is enabled on system
     const darkModeOn =
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches;
     console.log('Device darkModeOn:', darkModeOn);
     this.darkModeEnabled = darkModeOn;
-
     this.sub$ = this.darkToggleControl.valueChanges.subscribe((darkMode) => {
       console.log('Toggle darkMode: ', darkMode);
       this.darkModeEnabled = darkMode == 'true';
       this.onDarkModeEnable.next(this.darkModeEnabled);
     });
-    // set the toggle initial state to the device dark mode preference
-    this.darkToggleControl.setValue(darkModeOn.toString());
+  }
+
+  ngOnDestroy(): void {
+    this.sub$?.unsubscribe();
   }
 }

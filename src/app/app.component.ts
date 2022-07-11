@@ -31,7 +31,6 @@ export class AppComponent {
 
   ngAfterViewInit() {
     this.logger.tick_then(() => {
-      this.darkModeToggleComponent.setDarkMode();
       this.className = this.darkModeToggleComponent.darkModeEnabled
         ? darkClassName
         : '';
