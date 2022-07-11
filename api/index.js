@@ -78,79 +78,7 @@ app.get("/api/geo/reverse/lat/:lat/lon/:lon", (req, res) => {
     });
 });
 
-// app.get("/api/weather/:city", (req, res) => {
-//   const url = withQuery("https://api.openweathermap.org/data/2.5/weather", {
-//     q: req.params.city,
-//     units: "metric",
-//     appid: OPENWEATHERMAP_KEY,
-//   });
-//   let country;
-//   let cityName;
-//   let temp_min;
-//   let temp_max;
-//   console.info(url);
-//   fetch(url)
-//     .then((result) => result.json())
-//     .then((result) => {
-//       country = result.sys.country;
-//       cityName = result.name;
-//       temp_min = result.main.temp_min;
-//       temp_max = result.main.temp_max;
-//       return weatherOneCall(result.coord.lat, result.coord.lon);
-//     })
-//     .then((result) => {
-//       console.info("current weather: ", result);
-//       let cleanedResults = [];
-//       try {
-//         result.current.weather.forEach((weather) => {
-//           cleanedResults.push({
-//             cityName: cityName,
-//             lat: result.lat,
-//             lon: result.lon,
-//             timezone_offset: result.timezone_offset,
-//             country: country,
-//             main: weather.main,
-//             description: weather.description,
-//             icon: weather.icon,
-//             temperature: result.current.temp,
-//             feels_like: result.current.feels_like,
-//             temp_min: temp_min,
-//             temp_max: temp_max,
-//             humidity: result.current.humidity,
-//             pressure: result.current.pressure,
-//             dew_point: result.current.dew_point,
-//             wind_speed: result.current.wind_speed,
-//             wind_dir: result.current.wind_deg,
-//             wind_gust: result.current.wind_gust,
-//             uvi: result.current.uvi,
-//             rain: result.current.rain ? result.current.rain["1h"] : 0,
-//             snow: result.current.snow ? result.current.snow["1h"] : 0,
-//             sunrise: result.current.sunrise,
-//             sunset: result.current.sunset,
-//             next_sunrises: [result.daily[0].sunrise, result.daily[1].sunrise],
-//             alerts: result.alerts,
-//             hourly: result.hourly,
-//             daily: result.daily,
-//             minutely: result.minutely,
-//             timestamp: result.current.dt,
-//             query_timestamp: new Date().getTime(),
-//           });
-//         });
-//       } catch (ex) {
-//         console.error(ex);
-//         throw new Error(JSON.stringify(result));
-//       }
 
-//       console.info("cleanedResults: ", cleanedResults);
-//       res.status(200).type("application/json");
-//       res.json(cleanedResults);
-//     })
-//     .catch((err) => {
-//       console.error("openweather api return error:", err);
-//       res.status(400).type("application/json");
-//       res.json(JSON.parse(err.message));
-//     });
-// });
 
 // get the onecall weather for the city by first doing a geocode lookup
 // need to use (*) to match all characters as some locations use the hyphen
