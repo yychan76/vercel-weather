@@ -244,7 +244,7 @@ function getGeocodeLocationFromCity(city) {
       return json;
     })
     .catch((err) => {
-      console.error("getGeocodeLocationFromCity error: ".err);
+      console.error("getGeocodeLocationFromCity error: ", err);
       return "";
     });
 }
